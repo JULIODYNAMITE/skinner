@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Tests y Libros Psicológicos con Carrito</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Fondo más suave */
+            color: #1a202c; /* Texto oscuro */
+            line-height: 1.6;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-8px); /* Efecto de elevación */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+        }
+        .btn-primary {
+            background-color: #4c51bf; /* Morado oscuro */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; /* Bordes más redondeados */
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #5a67d8; /* Morado más claro al pasar el ratón */
+        }
+         .btn-secondary {
+            background-color: #e2e8f0; /* Gris claro */
+            color: #2d3748; /* Texto oscuro */
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e0; /* Gris un poco más oscuro al pasar el ratón */
+        }
+        /* Estilos para el dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 200px; /* Ajustado para nombres de tests/libros más largos */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Asegura que los bordes redondeados se apliquen a los items */
+            top: 100%; /* Posicionar debajo del toggle */
+            left: 0;
+        }
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s ease;
+        }
+        .dropdown-content a:hover {
+            background-color: #e2e8f0; /* Gris claro al pasar el ratón */
+        }
+         /* Opcional: Mostrar dropdown al hacer click (requiere JS) */
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        /* Estilos para el carrito (modal/sidebar) */
+        .cart-modal {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 400px; /* Ancho máximo del carrito */
+            height: 100%;
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            overflow-y: auto; /* Scroll si el contenido es largo */
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%); /* Inicialmente fuera de pantalla */
+        }
+        .cart-modal.open {
+            display: block;
+            transform: translateX(0); /* Entra en pantalla */
+        }
+        .overlay {
+            display: none; /* Oculto por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+        }
+         .overlay.open {
+            display: block;
+        }
+
+        /* Estilos para videos responsivos */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem; /* Bordes redondeados para el contenedor */
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Estilos para las imágenes en la galería */
+        .image-gallery img {
+            width: 100%; /* Ajusta el ancho de la imagen al contenedor */
+            height: auto; /* Mantiene la proporción */
+            border-radius: 0.5rem; /* Bordes redondeados */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+            object-fit: cover; /* Asegura que la imagen cubra el área sin distorsión */
+        }
+         .image-item {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+         }
+          .image-item h4 {
+            margin-top: 0.75rem;
+            font-size: 1.125rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            color: #2d3748; /* gray-800 */
+          }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-4 md:mb-0">Evalúa tu Bienestar</h1>
+            <nav>
+                <ul class="flex space-x-6 text-lg items-center">
+                    <li><a href="#tests" class="hover:text-gray-200 transition duration-300">Tests</a></li>
+                    <li class="dropdown">
+                        <a href="#books" class="hover:text-gray-200 transition duration-300 cursor-pointer" id="books-dropdown-toggle">Libros <i class="fas fa-caret-down ml-1"></i></a>
+                        <div class="dropdown-content" id="books-dropdown-menu">
+                            <a href="#book-kit">Kit de Libros DSM-5 y Cie 10</a>
+                            <a href="#book-cie10">Cie 10 (Separado)</a>
+                            <a href="#book-dsm5">DSM-5 (Separado)</a>
+                            </div>
+                    </li>
+                     <li><a href="#videos" class="hover:text-gray-200 transition duration-300">Videos</a></li> <li><a href="#gallery" class="hover:text-gray-200 transition duration-300">Imágenes</a></li>
+                    <li><a href="#contact" class="hover:text-gray-200 transition duration-300">Contacto</a></li>
+                    <li>
+                        <button id="cart-icon" class="relative hover:text-gray-200 transition duration-300">
+                            <i class="fas fa-shopping-cart text-2xl"></i>
+                            <span id="cart-count" class="absolute top-[-10px] right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="overlay" class="overlay"></div>
+
+    <div id="cart-modal" class="cart-modal p-6">
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
+            <h3 class="text-2xl font-bold text-gray-800">Carrito de Compras</h3>
+            <button id="close-cart" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+        </div>
+        <div id="cart-items" class="space-y-4">
+            <p class="text-gray-500 text-center" id="empty-cart-message">El carrito está vacío.</p>
+        </div>
+
+        <div class="mt-6 pt-4 border-t">
+            <h4 class="text-lg font-semibold text-gray-800 mb-2">Cupón de Descuento</h4>
+            <div class="flex space-x-2">
+                <input type="text" id="coupon-input" class="flex-grow border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingresa tu cupón">
+                <button id="apply-coupon-btn" class="btn-secondary">Aplicar</button>
+            </div>
+            <p id="coupon-message" class="text-sm mt-2"></p> </div>
+
+        <div id="cart-summary" class="mt-4 pt-4 border-t">
+            <div class="flex justify-between items-center text-lg text-gray-800 mb-2">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">S/ 0.00</span>
+            </div>
+             <div id="discount-row" class="flex justify-between items-center text-lg text-green-600 mb-2 hidden">
+                <span>Descuento:</span>
+                <span id="cart-discount">- S/ 0.00</span>
+            </div>
+            <div class="flex justify-between items-center text-xl font-bold text-gray-800">
+                <span>Total:</span>
+                <span id="cart-total">S/ 0.00</span>
+            </div>
+            <button class="btn-primary w-full mt-6 text-center">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <main class="container mx-auto mt-10 p-6 flex-grow">
+        <section class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">Descubre más sobre ti mismo</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Accede a una variedad de recursos para tu crecimiento personal: tests psicológicos profesionales y una selección de libros especializados.</p>
+        </section>
+
+        <section id="tests" class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Nuestros Tests Disponibles</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="WISC-V" data-price="230.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">WISC-V</h4>
+                    <p class="text-gray-700 mb-6">Escala Wechsler de Inteligencia para Niños - Quinta Edición.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 230.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="WAIS-IV" data-price="230.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">WAIS-IV</h4>
+                    <p class="text-gray-700 mb-6">Escala Wechsler de Inteligencia para Adultos - Cuarta Edición.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 230.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Rías & Reynold" data-price="170.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Rías & Reynold</h4>
+                    <p class="text-gray-700 mb-6">Test de Habilidades Cognitivas de Reynolds.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 170.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Raven" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Raven</h4>
+                    <p class="text-gray-700 mb-6">Matrices Progresivas de Raven.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Benton" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Benton</h4>
+                    <p class="text-gray-700 mb-6">Test de Retención Visual de Benton.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Koppitz 2" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Koppitz 2</h4>
+                    <p class="text-gray-700 mb-6">Test Gestáltico Visomotor de Bender-Koppitz (Segunda Edición).</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Cumanin" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Cumanin</h4>
+                    <p class="text-gray-700 mb-6">Cuestionario de Madurez Neuropsicológica Infantil.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Neuropsi" data-price="50.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Neuropsi</h4>
+                    <p class="text-gray-700 mb-6">Evaluación Neuropsicológica Breve en Español.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 50.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Figura Compleja del Rey" data-price="50.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Figura Compleja del Rey</h4>
+                    <p class="text-gray-700 mb-6">Evalúa la organización perceptiva y la memoria visual.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 50.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de CPQ" data-price="60.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de CPQ</h4>
+                    <p class="text-gray-700 mb-6">Cuestionario de Personalidad para Niños.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 60.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test ESPQ" data-price="60.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test ESPQ</h4>
+                    <p class="text-gray-700 mb-6">Cuestionario de Personalidad para Niños de 8 a 12 años.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 60.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Minimental" data-price="60.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Minimental</h4>
+                    <p class="text-gray-700 mb-6">Mini-Examen Cognoscitivo (Folstein).</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 60.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Figura Humana" data-price="39.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de la Figura Humana</h4>
+                    <p class="text-gray-700 mb-6">Test Proyectivo para evaluar la personalidad a través del dibujo.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 39.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Persona Bajo la Lluvia" data-price="39.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de la Persona Bajo la Lluvia</h4>
+                    <p class="text-gray-700 mb-6">Test Proyectivo para evaluar la personalidad y recursos de afrontamiento.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 39.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Colores (Luscher)" data-price="49.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Colores (Luscher)</h4>
+                    <p class="text-gray-700 mb-6">Test Proyectivo para evaluar el estado psicológico a través de la elección de colores.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 49.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Bar-On (Niños y Adolescentes)" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test Bar-On (Niños y Adolescentes)</h4>
+                    <p class="text-gray-700 mb-6">Inventario de Inteligencia Emocional de BarOn ICE: NA, adaptado para niños y adolescentes.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Bar-On (Adultos)" data-price="55.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Test Bar-On (Adultos)</h4>
+                    <p class="text-gray-700 mb-6">Inventario de Cociente Emocional de BarOn, para la medida de la inteligencia emocional en adultos.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 55.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+
+        <section id="books" class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Libros Especializados</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                <div id="book-kit" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Kit de Libros DSM-5 y Cie 10" data-price="80.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Kit de Libros DSM-5 y Cie 10</h4>
+                    <p class="text-gray-700 mb-6">Obtén el Manual Diagnóstico y Estadístico de los Trastornos Mentales (DSM-5) y la Clasificación Estadística Internacional de Enfermedades y Problemas Relacionados con la Salud (CIE-10) juntos.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 80.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div id="book-dsm5" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro DSM-5" data-price="65.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Libro DSM-5 (Separado)</h4>
+                    <p class="text-gray-700 mb-6">Manual Diagnóstico y Estadístico de los Trastornos Mentales - Quinta Edición.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 65.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                 <div id="book-cie10" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro Cie 10" data-price="35.00">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Libro Cie 10 (Separado)</h4>
+                    <p class="text-gray-700 mb-6">Clasificación Estadística Internacional de Enfermedades y Problemas Relacionados con la Salud - Décima Revisión.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-700 font-extrabold text-xl">S/ 35.00</span>
+                        <button class="btn-primary add-to-cart">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+                </div>
+        </section>
+
+        <section id="videos" class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Videos</h3> <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Entendiendo la Inteligencia Emocional</h4>
+                    <div class="video-container mb-4">
+                        <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID_1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-gray-700">Un video introductorio sobre qué es la inteligencia emocional y por qué es importante.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg card border border-gray-200">
+                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Cómo Funcionan los Tests de Personalidad</h4>
+                    <div class="video-container mb-4">
+                         <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID_2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-gray-700">Exploración de los principios detrás de las evaluaciones de personalidad.</p>
+                </div>
+
+                 </div>
+        </section>
+
+        <section id="gallery" class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Galería de Imágenes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 image-gallery">
+
+                <div class="image-item">
+                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Kit de Libros DSM-5 y Cie 10</h4>
+                     <img src="https://i.imgur.com/P5gYtdB.jpeg" alt="Imagen Kit de Libros DSM-5 y Cie 10">
+                </div>
+
+                <div class="image-item">
+                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Test Bar-On (Niños y Adolescentes)</h4>
+                     <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Niños y Adolescentes">
+                </div>
+
+                 <div class="image-item">
+                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Test Bar-On (Adultos)</h4>
+                     <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Adultos">
+                </div>
+
+                </div>
+        </section>
+
+
+        <section id="contact" class="mb-16 text-center bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Contáctanos</h3>
+            <p class="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">Si tienes alguna pregunta, necesitas más información o soporte, no dudes en contactarnos a través de los siguientes medios:</p>
+
+            <div class="flex flex-col items-center space-y-6 md:space-y-0 md:flex-row md:justify-center md:space-x-12 text-xl text-gray-700">
+                <div class="flex items-center">
+                    <i class="fas fa-phone-alt mr-3 text-blue-600 text-2xl"></i>
+                    <span>Teléfono: 983882637</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fab fa-whatsapp mr-3 text-green-500 text-2xl"></i>
+                    <span>WhatsApp: 983882637</span>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <h4 class="text-2xl font-bold text-gray-800 mb-6">Síguenos en Redes Sociales</h4>
+                <div class="flex justify-center space-x-8 text-3xl">
+                    <a href="#" class="text-blue-700 hover:text-blue-900 transition duration-300"><i class="fab fa-facebook-square"></i></a>
+                    <a href="#" class="text-pink-600 hover:text-pink-800 transition duration-300"><i class="fab fa-instagram-square"></i></a>
+                    <a href="#" class="text-blue-400 hover:text-blue-600 transition duration-300"><i class="fab fa-twitter-square"></i></a>
+                    <a href="#" class="text-blue-800 hover:text-blue-950 transition duration-300"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 p-8 text-center mt-12">
+        <p>© 2025 Tu Nombre o Empresa. Todos los derechos reservados.</p>
+        <p class="text-sm mt-2">Diseñado con ❤️ para el autoconocimiento.</p>
+    </footer>
+
+    <script>
+        // JavaScript para el dropdown del menú
+        const dropdownToggle = document.getElementById('books-dropdown-toggle');
+        const dropdownMenu = document.getElementById('books-dropdown-menu');
+
+        dropdownToggle.addEventListener('click', function(event) {
+            event.preventDefault();
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (!event.target.matches('#books-dropdown-toggle') && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // JavaScript para el carrito de compras y cupones
+        const cartIcon = document.getElementById('cart-icon');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCartButton = document.getElementById('close-cart');
+        const overlay = document.getElementById('overlay');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartSubtotalSpan = document.getElementById('cart-subtotal');
+        const cartTotalSpan = document.getElementById('cart-total');
+        const cartDiscountSpan = document.getElementById('cart-discount');
+        const discountRow = document.getElementById('discount-row');
+        const cartCountSpan = document.getElementById('cart-count');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const couponInput = document.getElementById('coupon-input');
+        const applyCouponButton = document.getElementById('apply-coupon-btn');
+        const couponMessage = document.getElementById('coupon-message');
+
+        let cart = []; // Array para almacenar los items del carrito
+        let appliedCoupon = null; // Variable para almacenar el cupón aplicado
+
+        // Define tus cupones de descuento aquí
+        const coupons = {
+            "DESC10": { type: "percentage", value: 10, message: "10% de descuento aplicado!" }, // 10% de descuento
+            "OFERTA5": { type: "fixed", value: 5.00, message: "S/ 5.00 de descuento aplicado!" } // S/ 5.00 de descuento fijo
+            // Puedes añadir más cupones aquí
+        };
+
+        // Función para actualizar la visualización del carrito
+        function updateCartDisplay() {
+            cartItemsContainer.innerHTML = ''; // Limpiar el contenido actual del carrito
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+            } else {
+                emptyCartMessage.style.display = 'none';
+                cart.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'border-b', 'pb-2');
+                    itemElement.innerHTML = `
+                        <div>
+                            <p class="font-semibold">${item.name}</p>
+                            <p class="text-sm text-gray-600">S/ ${item.price.toFixed(2)}</p>
+                        </div>
+                        <button class="text-red-500 hover:text-red-700 text-xl remove-from-cart" data-index="${index}">×</button>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                    subtotal += item.price;
+                });
+            }
+
+            cartSubtotalSpan.textContent = `S/ ${subtotal.toFixed(2)}`;
+
+            // Calcular y mostrar el descuento si hay un cupón aplicado
+            let discount = 0;
+            if (appliedCoupon) {
+                if (appliedCoupon.type === "percentage") {
+                    discount = (subtotal * appliedCoupon.value) / 100;
+                    cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)} (${appliedCoupon.value}%)`;
+                } else if (appliedCoupon.type === "fixed") {
+                    discount = appliedCoupon.value;
+                    cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)}`;
+                }
+                discountRow.classList.remove('hidden'); // Mostrar la fila de descuento
+            } else {
+                discountRow.classList.add('hidden'); // Ocultar la fila de descuento
+                cartDiscountSpan.textContent = `- S/ 0.00`;
+            }
+
+            const total = subtotal - discount;
+            cartTotalSpan.textContent = `S/ ${Math.max(0, total).toFixed(2)}`; // Asegura que el total no sea negativo
+
+            cartCountSpan.textContent = cart.length; // Actualizar el contador del carrito
+        }
+
+        // Función para agregar un item al carrito
+        function addItemToCart(name, price) {
+            cart.push({ name, price });
+            // Resetear el cupón aplicado cuando se añade un nuevo item (opcional, depende de la lógica de negocio)
+            // appliedCoupon = null;
+            // couponMessage.textContent = '';
+            // couponInput.value = '';
+            updateCartDisplay();
+        }
+
+        // Función para remover un item del carrito
+        function removeItemFromCart(index) {
+            cart.splice(index, 1);
+             // Resetear el cupón aplicado cuando se remueve un item (opcional)
+            // appliedCoupon = null;
+            // couponMessage.textContent = '';
+            // couponInput.value = '';
+            updateCartDisplay();
+        }
+
+        // Función para aplicar un cupón de descuento
+        function applyCoupon() {
+            const code = couponInput.value.trim().toUpperCase();
+            const validCoupon = coupons[code];
+
+            if (appliedCoupon) {
+                couponMessage.textContent = "Ya tienes un cupón aplicado.";
+                couponMessage.style.color = "orange";
+                return;
+            }
+
+            if (validCoupon) {
+                appliedCoupon = validCoupon;
+                couponMessage.textContent = validCoupon.message;
+                couponMessage.style.color = "green";
+                updateCartDisplay(); // Recalcular el total con el descuento
+            } else {
+                appliedCoupon = null; // Asegurarse de que no haya cupón aplicado si el código es inválido
+                couponMessage.textContent = "Cupón inválido.";
+                couponMessage.style.color = "red";
+                updateCartDisplay(); // Recalcular el total sin descuento
+            }
+        }
+
+        // Event Listeners para los botones "Agregar al Carrito"
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const itemCard = this.closest('.card');
+                const itemName = itemCard.dataset.name;
+                const itemPrice = parseFloat(itemCard.dataset.price);
+                addItemToCart(itemName, itemPrice);
+            });
+        });
+
+        // Event Listener para remover items del carrito (delegación de eventos)
+        cartItemsContainer.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-from-cart')) {
+                const index = event.target.dataset.index;
+                removeItemFromCart(index);
+            }
+        });
+
+        // Event Listener para el botón "Aplicar Cupón"
+        applyCouponButton.addEventListener('click', applyCoupon);
+
+         // Event Listener para aplicar cupón al presionar Enter en el input
+        couponInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevenir el envío del formulario si estuviera dentro de uno
+                applyCoupon();
+            }
+        });
+
+
+        // Event Listener para abrir el carrito
+        cartIcon.addEventListener('click', function() {
+            cartModal.classList.add('open');
+            overlay.classList.add('open');
+        });
+
+        // Event Listener para cerrar el carrito
+        closeCartButton.addEventListener('click', function() {
+            cartModal.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+
+        // Event Listener para cerrar el carrito al hacer click en el overlay
+        overlay.addEventListener('click', function() {
+            cartModal.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+
+        // Inicializar la visualización del carrito al cargar la página
+        updateCartDisplay();
+
+    </script>
+
+</body>
+</html>

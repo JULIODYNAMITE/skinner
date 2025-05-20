@@ -529,7 +529,7 @@
         const addToCartButtons = document.querySelectorAll('.add-to-cart');
         const couponInput = document.getElementById('coupon-input');
         const applyCouponButton = document.getElementById('apply-coupon-btn');
-        const couponMessage = document.getElementById('coupon-message');
+        const couponMessage = documentgetElementById('coupon-message');
         const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
 
         let cart = []; // Array para almacenar los items del carrito
@@ -641,7 +641,9 @@
                 return;
             }
 
-            const phoneNumber = "983882637"; // Reemplaza con tu número de WhatsApp
+            // Número de teléfono con prefijo de país (51 para Perú)
+            const phoneNumber = "51983882637"; // Número corregido
+
             let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
 
             cart.forEach(item => {

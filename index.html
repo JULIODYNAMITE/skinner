@@ -3,23 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Tests y Libros Psicológicos con Carrito</title>
+    <title>Skinner Store - Tests y Libros Psicológicos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Estilos personalizados */
+        /* Estilos personalizados - Vuelven al diseño anterior */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Fuente Inter */
             background-color: #f0f4f8; /* Fondo más suave */
             color: #1a202c; /* Texto oscuro */
             line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+        h1, h2, h3, h4, h5 {
+             font-family: 'Inter', sans-serif; /* Títulos también en Inter */
+             color: #2d3748; /* Gris oscuro para títulos */
+        }
+         /* Estilos del encabezado - Mantiene la estructura moderna pero con estilos anteriores */
+        header {
+            background-color: #4c51bf; /* Morado oscuro */
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        }
+        header .container {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             padding-top: 1.5rem;
+             padding-bottom: 1.5rem;
+        }
+        header h1 {
+            font-size: 2.5rem; /* Tamaño de título ajustado */
+             color: white; /* Título blanco */
+             text-transform: none; /* Sin mayúsculas forzadas */
+             letter-spacing: normal; /* Espaciado normal */
+             font-weight: 800; /* Extra bold */
+        }
+        header nav ul {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem; /* Espacio entre elementos del menú */
+        }
+        header nav a {
+            color: white; /* Texto blanco */
+            transition: color 0.3s ease;
+        }
+        header nav a:hover {
+            color: #e2e8f0; /* Gris claro al pasar el ratón */
+        }
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem; /* Espacio entre iconos */
+        }
+        .header-icons button {
+            color: white; /* Color de icono blanco */
+            transition: color 0.3s ease;
+        }
+        .header-icons button:hover {
+             color: #e2e8f0; /* Gris claro al pasar el ratón */
+        }
+        .header-icons .relative {
+            position: relative;
+        }
+        .header-icons .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #f56565; /* Rojo */
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 9999px; /* Forma redonda */
+            height: 20px;
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
         .card {
+            background-color: white; /* Fondo de tarjeta blanco */
+            border: 1px solid #e2e8f0; /* Borde gris claro */
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
         .card:hover {
             transform: translateY(-8px); /* Efecto de elevación */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
         }
         .btn-primary {
             background-color: #4c51bf; /* Morado oscuro */
@@ -49,24 +123,26 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
-            min-width: 200px; /* Ajustado para nombres de tests/libros más largos */
+            background-color: #f9f9f9; /* Fondo claro */
+            min-width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             border-radius: 0.5rem;
-            overflow: hidden; /* Asegura que los bordes redondeados se apliquen a los items */
-            top: 100%; /* Posicionar debajo del toggle */
+            overflow: hidden;
+            top: 100%;
             left: 0;
+            border: none; /* Sin borde específico */
         }
         .dropdown-content a {
-            color: #333;
+            color: #333; /* Texto oscuro */
             padding: 12px 16px;
             text-decoration: none;
             display: block;
             transition: background-color 0.2s ease;
         }
         .dropdown-content a:hover {
-            background-color: #e2e8f0; /* Gris claro al pasar el ratón */
+            background-color: #e2e8f0; /* Fondo gris claro al pasar el ratón */
+            color: #333; /* Texto oscuro */
         }
          /* Opcional: Mostrar dropdown al hacer click (requiere JS) */
         .dropdown.active .dropdown-content {
@@ -82,12 +158,13 @@
             width: 100%;
             max-width: 400px; /* Ancho máximo del carrito */
             height: 100%;
-            background-color: white;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            background-color: white; /* Fondo blanco */
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1); /* Sombra suave */
             z-index: 100;
             overflow-y: auto; /* Scroll si el contenido es largo */
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%); /* Inicialmente fuera de pantalla */
+            color: #1a202c; /* Texto oscuro */
         }
         .cart-modal.open {
             display: block;
@@ -100,12 +177,52 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
             z-index: 50;
         }
          .overlay.open {
             display: block;
         }
+         .cart-modal h3 {
+            color: #2d3748; /* Gris oscuro para el título del carrito */
+         }
+         .cart-modal .border-b {
+             border-bottom-color: #e2e8f0; /* Borde sutil */
+         }
+         .cart-modal .border-t {
+             border-top-color: #e2e8f0; /* Borde sutil */
+         }
+         .cart-modal .text-gray-500 {
+             color: #a0aec0; /* Gris claro */
+         }
+         .cart-modal .text-gray-600 {
+             color: #718096; /* Gris */
+         }
+         .cart-modal .text-gray-800 {
+             color: #2d3748; /* Texto oscuro */
+         }
+         .cart-modal .text-red-500 {
+             color: #e53e3e; /* Rojo */
+         }
+         .cart-modal .hover:text-red-700:hover {
+             color: #c53030; /* Rojo más oscuro al pasar el ratón */
+         }
+         .cart-modal .text-green-600 {
+             color: #38a169; /* Verde */
+         }
+         .cart-modal input[type="text"] {
+            background-color: white; /* Fondo de input blanco */
+            border-color: #cbd5e0; /* Borde gris */
+            color: #2d3748; /* Texto oscuro */
+         }
+          .cart-modal input[type="text"]::placeholder {
+            color: #a0aec0; /* Placeholder gris claro */
+         }
+         .cart-modal input[type="text"]:focus {
+            border-color: #4c51bf; /* Borde morado al enfocar */
+            box-shadow: 0 0 0 1px #4c51bf;
+         }
+
 
         /* Estilos para videos responsivos */
         .video-container {
@@ -116,6 +233,7 @@
             max-width: 100%;
             background: #000;
             border-radius: 0.5rem; /* Bordes redondeados para el contenedor */
+             border: none; /* Sin borde específico */
         }
 
         .video-container iframe {
@@ -132,10 +250,10 @@
             height: auto; /* Mantiene la proporción */
             border-radius: 0.5rem; /* Bordes redondeados */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-            object-fit: cover; /* Asegura que la imagen cubra el área sin distorsión */
+             border: none; /* Sin borde específico */
         }
          .image-item {
-            background-color: white;
+            background-color: white; /* Fondo blanco */
             padding: 1rem;
             border-radius: 0.75rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -143,13 +261,45 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            border: 1px solid #e2e8f0; /* Borde sutil */
          }
-          .image-item h4 {
+          .image-item h4, .image-item h5 {
             margin-top: 0.75rem;
             font-size: 1.125rem; /* text-xl */
             font-weight: 600; /* font-semibold */
-            color: #2d3748; /* gray-800 */
+            color: #2d3748; /* Gris oscuro */
           }
+
+        /* Contacto y Footer */
+        #contact {
+             background-color: white; /* Fondo blanco */
+             border: 1px solid #e2e8f0; /* Borde sutil */
+             color: #2d3748; /* Texto oscuro */
+        }
+        #contact h3, #contact h4 {
+            color: #2d3748; /* Gris oscuro */
+        }
+        #contact .text-gray-700 {
+            color: #4a5568; /* Gris */
+        }
+         #contact .text-blue-600 {
+             color: #3182ce; /* Azul */
+         }
+         #contact .text-green-500 {
+             color: #38a169; /* Verde */
+         }
+         #contact a {
+             color: #4c51bf; /* Morado */
+         }
+          #contact a:hover {
+             color: #5a67d8; /* Morado más claro al pasar el ratón */
+          }
+
+        footer {
+            background-color: #2d3748; /* Fondo oscuro para el footer */
+            color: #cbd5e0; /* Gris claro */
+        }
+
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -157,28 +307,39 @@
     <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 shadow-lg">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
             <h1 class="text-3xl md:text-4xl font-extrabold mb-4 md:mb-0">Skinner Store</h1>
-            <nav>
-                <ul class="flex space-x-6 text-lg items-center">
-                    <li><a href="#tests" class="hover:text-gray-200 transition duration-300">Tests</a></li>
-                    <li class="dropdown">
-                        <a href="#books" class="hover:text-gray-200 transition duration-300 cursor-pointer" id="books-dropdown-toggle">Libros <i class="fas fa-caret-down ml-1"></i></a>
-                        <div class="dropdown-content" id="books-dropdown-menu">
-                            <a href="#book-kit">Kit de Libros DSM-5 y Cie 10</a>
-                            <a href="#book-cie10">Cie 10 (Separado)</a>
-                            <a href="#book-dsm5">DSM-5 (Separado)</a>
+
+            <div class="flex items-center space-x-6">
+                 <nav class="hidden md:block"> <ul class="flex space-x-6 text-lg items-center">
+                        <li><a href="#tests" class="hover:text-gray-200 transition duration-300">Tests</a></li>
+                        <li class="dropdown">
+                            <a href="#books" class="hover:text-gray-200 transition duration-300 cursor-pointer" id="books-dropdown-toggle">Libros <i class="fas fa-caret-down ml-1"></i></a>
+                            <div class="dropdown-content" id="books-dropdown-menu">
+                                <a href="#book-kit">Kit de Libros DSM-5 y Cie 10</a>
+                                <a href="#book-cie10">Cie 10 (Separado)</a>
+                                <a href="#book-dsm5">DSM-5 (Separado)</a>
+                                </div>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#resources" class="hover:text-gray-200 transition duration-300 cursor-pointer" id="resources-dropdown-toggle">Recursos Visuales <i class="fas fa-caret-down ml-1"></i></a>
+                            <div class="dropdown-content" id="resources-dropdown-menu">
+                                <a href="#resources">Videos</a>
+                                <a href="#resources">Imágenes</a>
                             </div>
-                    </li>
-                     <li><a href="#videos" class="hover:text-gray-200 transition duration-300">Videos</a></li>
-                     <li><a href="#gallery" class="hover:text-gray-200 transition duration-300">Imágenes</a></li>
-                    <li><a href="#contact" class="hover:text-gray-200 transition duration-300">Contacto</a></li>
-                    <li>
-                        <button id="cart-icon" class="relative hover:text-gray-200 transition duration-300">
-                            <i class="fas fa-shopping-cart text-2xl"></i>
-                            <span id="cart-count" class="absolute top-[-10px] right-[-10px] bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+                        </li>
+                        <li><a href="#contact" class="hover:text-gray-200 transition duration-300">Contacto</a></li>
+                    </ul>
+                </nav>
+
+                <div class="header-icons">
+                    <button class="text-xl hover:text-gray-200 transition duration-300">
+                         <i class="fas fa-search"></i>
+                    </button>
+                    <button id="cart-icon" class="relative text-xl hover:text-gray-200 transition duration-300">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -186,7 +347,7 @@
 
     <div id="cart-modal" class="cart-modal p-6">
         <div class="flex justify-between items-center mb-6 border-b pb-4">
-            <h3 class="text-2xl font-bold text-gray-800">Carrito de Compras</h3>
+            <h3 class="text-2xl font-bold">Carrito de Compras</h3>
             <button id="close-cart" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
         </div>
         <div id="cart-items" class="space-y-4">
@@ -194,7 +355,7 @@
         </div>
 
         <div class="mt-6 pt-4 border-t">
-            <h4 class="text-lg font-semibold text-gray-800 mb-2">Cupón de Descuento</h4>
+            <h4 class="text-lg font-semibold mb-2">Cupón de Descuento</h4>
             <div class="flex space-x-2">
                 <input type="text" id="coupon-input" class="flex-grow border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingresa tu cupón">
                 <button id="apply-coupon-btn" class="btn-secondary">Aplicar</button>
@@ -419,49 +580,53 @@
                 </div>
         </section>
 
-        <section id="videos" class="mb-16">
-            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Videos</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <section id="resources" class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Recursos Visuales</h3>
 
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Video sobre WISC-V</h4>
-                    <div class="video-container mb-4">
-                        <iframe src="https://youtube.com/shorts/jr4fmybFeFM?si=selmuwtC10GQotQS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-gray-700">Información sobre la Escala Wechsler de Inteligencia para Niños - Quinta Edición.</p>
-                </div>
+            <div class="mb-12">
+                 <h4 class="text-2xl font-bold text-gray-800 mb-6 text-center">Videos</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-                <div class="bg-white p-6 rounded-xl shadow-lg card border border-gray-200">
-                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Video sobre WAIS-IV</h4>
-                    <div class="video-container mb-4">
-                         <iframe src="https://youtube.com/shorts/jaSJZS5ugOI?si=4_EHBDlNkjGZFxFd" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                        <h5 class="text-xl font-semibold text-gray-800 mb-4">Video sobre WISC-V</h5>
+                        <div class="video-container mb-4">
+                            <iframe src="https://youtube.com/shorts/jr4fmybFeFM?si=selmuwtC10GQotQS" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-gray-700">Información sobre la Escala Wechsler de Inteligencia para Niños - Quinta Edición.</p>
                     </div>
-                    <p class="text-gray-700">Información sobre la Escala Wechsler de Inteligencia para Adultos - Cuarta Edición.</p>
-                </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg card border border-gray-200">
+                         <h5 class="text-xl font-semibold text-gray-800 mb-4">Video sobre WAIS-IV</h5>
+                        <div class="video-container mb-4">
+                             <iframe src="https://youtube.com/shorts/jaSJZS5ugOI?si=4_EHBDlNkjGZFxFd" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-gray-700">Información sobre la Escala Wechsler de Inteligencia para Adultos - Cuarta Edición.</p>
+                    </div>
 
                  </div>
-        </section>
+            </div>
 
-        <section id="gallery" class="mb-16">
-            <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Galería de Imágenes</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 image-gallery">
+            <div>
+                <h4 class="text-2xl font-bold text-gray-800 mb-6 text-center">Imágenes</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 image-gallery">
 
-                <div class="image-item">
-                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Kit de Libros DSM-5 y Cie 10</h4>
-                     <img src="https://i.imgur.com/P5gYtdB.jpeg" alt="Imagen Kit de Libros DSM-5 y Cie 10">
+                    <div class="image-item bg-white border border-gray-200">
+                         <h5 class="text-xl font-semibold text-gray-800 mb-4 text-center">Kit de Libros DSM-5 y Cie 10</h5>
+                         <img src="https://i.imgur.com/P5gYtdB.jpeg" alt="Imagen Kit de Libros DSM-5 y Cie 10">
+                    </div>
+
+                    <div class="image-item bg-white border border-gray-200">
+                         <h5 class="text-xl font-semibold text-gray-800 mb-4 text-center">Test Bar-On (Niños y Adolescentes)</h5>
+                         <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Niños y Adolescentes">
+                    </div>
+
+                     <div class="image-item bg-white border border-gray-200">
+                         <h5 class="text-xl font-semibold text-gray-800 mb-4 text-center">Test Bar-On (Adultos)</h5>
+                         <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Adultos">
+                    </div>
+
                 </div>
-
-                <div class="image-item">
-                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Test Bar-On (Niños y Adolescentes)</h4>
-                     <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Niños y Adolescentes">
-                </div>
-
-                 <div class="image-item">
-                     <h4 class="text-xl font-bold text-gray-800 mb-4 text-center">Test Bar-On (Adultos)</h4>
-                     <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Adultos">
-                </div>
-
-                </div>
+            </div>
         </section>
 
 
@@ -501,20 +666,35 @@
     <script>
         // Espera a que el DOM esté completamente cargado antes de ejecutar el script
         document.addEventListener('DOMContentLoaded', function() {
-            // JavaScript para el dropdown del menú
-            const dropdownToggle = document.getElementById('books-dropdown-toggle');
-            const dropdownMenu = document.getElementById('books-dropdown-menu');
+            // JavaScript para el dropdown del menú de Libros
+            const booksDropdownToggle = document.getElementById('books-dropdown-toggle');
+            const booksDropdownMenu = document.getElementById('books-dropdown-menu');
 
-            dropdownToggle.addEventListener('click', function(event) {
+            booksDropdownToggle.addEventListener('click', function(event) {
                 event.preventDefault();
-                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                booksDropdownMenu.style.display = booksDropdownMenu.style.display === 'block' ? 'none' : 'block';
             });
 
+            // JavaScript para el dropdown del menú de Recursos Visuales
+            const resourcesDropdownToggle = document.getElementById('resources-dropdown-toggle');
+            const resourcesDropdownMenu = document.getElementById('resources-dropdown-menu');
+
+            resourcesDropdownToggle.addEventListener('click', function(event) {
+                event.preventDefault();
+                resourcesDropdownMenu.style.display = resourcesDropdownMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+
+            // Ocultar ambos dropdowns si se hace click fuera de ellos
             window.addEventListener('click', function(event) {
-                if (!event.target.matches('#books-dropdown-toggle') && !dropdownMenu.contains(event.target)) {
-                    dropdownMenu.style.display = 'none';
+                if (!event.target.matches('#books-dropdown-toggle') && !booksDropdownMenu.contains(event.target)) {
+                    booksDropdownMenu.style.display = 'none';
+                }
+                 if (!event.target.matches('#resources-dropdown-toggle') && !resourcesDropdownMenu.contains(event.target)) {
+                    resourcesDropdownMenu.style.display = 'none';
                 }
             });
+
 
             // JavaScript para el carrito de compras y cupones
             const cartIcon = document.getElementById('cart-icon');
@@ -532,7 +712,7 @@
             const couponInput = document.getElementById('coupon-input');
             const applyCouponButton = document.getElementById('apply-coupon-btn');
             const couponMessage = document.getElementById('coupon-message');
-            // No seleccionamos el botón de pago con un listener de WhatsApp aquí
+            const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
 
             let cart = []; // Array para almacenar los items del carrito
             let appliedCoupon = null; // Variable para almacenar el cupón aplicado
@@ -636,7 +816,34 @@
                 }
             }
 
-            // La función redirectToWhatsapp y su event listener han sido eliminados.
+            // Función para generar el mensaje de WhatsApp y redirigir
+            function redirectToWhatsapp() {
+                if (cart.length === 0) {
+                    alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
+                    return;
+                }
+
+                // Número de teléfono con prefijo de país (51 para Perú)
+                const phoneNumber = "51983882637"; // Número corregido
+
+                let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
+
+                cart.forEach(item => {
+                    message += `- ${item.name}: S/ ${item.price.toFixed(2)}\n`;
+                });
+
+                const total = parseFloat(cartTotalSpan.textContent.replace('S/ ', ''));
+                message += `\nTotal a pagar: S/ ${total.toFixed(2)}`;
+
+                // Codificar el mensaje para la URL
+                const encodedMessage = encodeURIComponent(message);
+
+                // Construir la URL de WhatsApp
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+                // Redirigir al usuario a WhatsApp
+                window.open(whatsappUrl, '_blank'); // Abre en una nueva pestaña
+            }
 
 
             // Event Listeners para los botones "Agregar al Carrito"
@@ -668,7 +875,8 @@
                 }
             });
 
-            // El event listener para el botón "Proceder al Pago" a WhatsApp ha sido eliminado.
+            // Event Listener para el botón "Proceder al Pago" - Redirige a WhatsApp
+            checkoutButton.addEventListener('click', redirectToWhatsapp);
 
 
             // Event Listener para abrir el carrito
@@ -691,6 +899,7 @@
 
             // Inicializar la visualización del carrito al cargar la página
             updateCartDisplay();
+
         }); // Cierre del DOMContentLoaded
     </script>
 

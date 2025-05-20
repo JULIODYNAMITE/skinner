@@ -79,8 +79,8 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 100%; /* Ocupa todo el ancho en móviles */
-            max-width: 400px; /* Ancho máximo en pantallas más grandes */
+            width: 100%;
+            max-width: 400px; /* Ancho máximo del carrito */
             height: 100%;
             background-color: white;
             box-shadow: -5px 0 15px rgba(0,0,0,0.1);
@@ -88,7 +88,6 @@
             overflow-y: auto; /* Scroll si el contenido es largo */
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%); /* Inicialmente fuera de pantalla */
-            box-sizing: border-box; /* Incluir padding y borde en el ancho total */
         }
         .cart-modal.open {
             display: block;

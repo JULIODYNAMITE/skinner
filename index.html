@@ -524,7 +524,7 @@
             const cartItemsContainer = document.getElementById('cart-items');
             const cartSubtotalSpan = document.getElementById('cart-subtotal');
             const cartTotalSpan = document.getElementById('cart-total');
-            const cartDiscountSpan = document.getElementById('cart-discount');
+            const cartDiscountSpan = documentgetElementById('cart-discount');
             const discountRow = document.getElementById('discount-row');
             const cartCountSpan = document.getElementById('cart-count');
             const emptyCartMessage = document.getElementById('empty-cart-message');
@@ -532,7 +532,7 @@
             const couponInput = document.getElementById('coupon-input');
             const applyCouponButton = document.getElementById('apply-coupon-btn');
             const couponMessage = document.getElementById('coupon-message');
-            const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
+            // No seleccionamos el botón de pago con un listener de WhatsApp aquí
 
             let cart = []; // Array para almacenar los items del carrito
             let appliedCoupon = null; // Variable para almacenar el cupón aplicado
@@ -636,34 +636,7 @@
                 }
             }
 
-            // Función para generar el mensaje de WhatsApp y redirigir
-            function redirectToWhatsapp() {
-                if (cart.length === 0) {
-                    alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
-                    return;
-                }
-
-                // Número de teléfono con prefijo de país (51 para Perú)
-                const phoneNumber = "51983882637"; // Número corregido
-
-                let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
-
-                cart.forEach(item => {
-                    message += `- ${item.name}: S/ ${item.price.toFixed(2)}\n`;
-                });
-
-                const total = parseFloat(cartTotalSpan.textContent.replace('S/ ', ''));
-                message += `\nTotal a pagar: S/ ${total.toFixed(2)}`;
-
-                // Codificar el mensaje para la URL
-                const encodedMessage = encodeURIComponent(message);
-
-                // Construir la URL de WhatsApp
-                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-                // Redirigir al usuario a WhatsApp
-                window.open(whatsappUrl, '_blank'); // Abre en una nueva pestaña
-            }
+            // La función redirectToWhatsapp y su event listener han sido eliminados.
 
 
             // Event Listeners para los botones "Agregar al Carrito"
@@ -695,8 +668,7 @@
                 }
             });
 
-            // Event Listener para el botón "Proceder al Pago"
-            checkoutButton.addEventListener('click', redirectToWhatsapp);
+            // El event listener para el botón "Proceder al Pago" a WhatsApp ha sido eliminado.
 
 
             // Event Listener para abrir el carrito

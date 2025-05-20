@@ -79,8 +79,7 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 100%;
-            max-width: 400px; /* Ancho máximo del carrito */
+            /* Eliminados width y max-width de aquí para usar clases de Tailwind */
             height: 100%;
             background-color: white;
             box-shadow: -5px 0 15px rgba(0,0,0,0.1);
@@ -184,7 +183,7 @@
 
     <div id="overlay" class="overlay"></div>
 
-    <div id="cart-modal" class="cart-modal p-6">
+    <div id="cart-modal" class="cart-modal p-6 w-full sm:max-w-md">
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <h3 class="text-2xl font-bold text-gray-800">Carrito de Compras</h3>
             <button id="close-cart" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
@@ -688,6 +687,3 @@
 
 </body>
 </html>
-
-     
-      

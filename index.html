@@ -499,225 +499,227 @@
     </footer>
 
     <script>
-        // JavaScript para el dropdown del menú
-        const dropdownToggle = document.getElementById('books-dropdown-toggle');
-        const dropdownMenu = document.getElementById('books-dropdown-menu');
+        // Espera a que el DOM esté completamente cargado antes de ejecutar el script
+        document.addEventListener('DOMContentLoaded', function() {
+            // JavaScript para el dropdown del menú
+            const dropdownToggle = document.getElementById('books-dropdown-toggle');
+            const dropdownMenu = document.getElementById('books-dropdown-menu');
 
-        dropdownToggle.addEventListener('click', function(event) {
-            event.preventDefault();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
+            dropdownToggle.addEventListener('click', function(event) {
+                event.preventDefault();
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            });
 
-        window.addEventListener('click', function(event) {
-            if (!event.target.matches('#books-dropdown-toggle') && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
-
-        // JavaScript para el carrito de compras y cupones
-        const cartIcon = document.getElementById('cart-icon');
-        const cartModal = document.getElementById('cart-modal');
-        const closeCartButton = document.getElementById('close-cart');
-        const overlay = document.getElementById('overlay');
-        const cartItemsContainer = document.getElementById('cart-items');
-        const cartSubtotalSpan = document.getElementById('cart-subtotal');
-        const cartTotalSpan = document.getElementById('cart-total');
-        const cartDiscountSpan = document.getElementById('cart-discount');
-        const discountRow = document.getElementById('discount-row');
-        const cartCountSpan = document.getElementById('cart-count');
-        const emptyCartMessage = document.getElementById('empty-cart-message');
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const couponInput = document.getElementById('coupon-input');
-        const applyCouponButton = document.getElementById('apply-coupon-btn');
-        const couponMessage = documentgetElementById('coupon-message');
-        const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
-
-        let cart = []; // Array para almacenar los items del carrito
-        let appliedCoupon = null; // Variable para almacenar el cupón aplicado
-
-        // Define tus cupones de descuento aquí
-        const coupons = {
-            "DESC10": { type: "percentage", value: 10, message: "10% de descuento aplicado!" }, // 10% de descuento
-            "OFERTA5": { type: "fixed", value: 5.00, message: "S/ 5.00 de descuento aplicado!" } // S/ 5.00 de descuento fijo
-            // Puedes añadir más cupones aquí
-        };
-
-        // Función para actualizar la visualización del carrito
-        function updateCartDisplay() {
-            cartItemsContainer.innerHTML = ''; // Limpiar el contenido actual del carrito
-            let subtotal = 0;
-
-            if (cart.length === 0) {
-                emptyCartMessage.style.display = 'block';
-            } else {
-                emptyCartMessage.style.display = 'none';
-                cart.forEach((item, index) => {
-                    const itemElement = document.createElement('div');
-                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'border-b', 'pb-2');
-                    itemElement.innerHTML = `
-                        <div>
-                            <p class="font-semibold">${item.name}</p>
-                            <p class="text-sm text-gray-600">S/ ${item.price.toFixed(2)}</p>
-                        </div>
-                        <button class="text-red-500 hover:text-red-700 text-xl remove-from-cart" data-index="${index}">×</button>
-                    `;
-                    cartItemsContainer.appendChild(itemElement);
-                    subtotal += item.price;
-                });
-            }
-
-            cartSubtotalSpan.textContent = `S/ ${subtotal.toFixed(2)}`;
-
-            // Calcular y mostrar el descuento si hay un cupón aplicado
-            let discount = 0;
-            if (appliedCoupon) {
-                if (appliedCoupon.type === "percentage") {
-                    discount = (subtotal * appliedCoupon.value) / 100;
-                    cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)} (${appliedCoupon.value}%)`;
-                } else if (appliedCoupon.type === "fixed") {
-                    discount = appliedCoupon.value;
-                    cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)}`;
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('#books-dropdown-toggle') && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = 'none';
                 }
-                discountRow.classList.remove('hidden'); // Mostrar la fila de descuento
-            } else {
-                discountRow.classList.add('hidden'); // Ocultar la fila de descuento
-                cartDiscountSpan.textContent = `- S/ 0.00`;
-            }
-
-            const total = subtotal - discount;
-            cartTotalSpan.textContent = `S/ ${Math.max(0, total).toFixed(2)}`; // Asegura que el total no sea negativo
-
-            cartCountSpan.textContent = cart.length; // Actualizar el contador del carrito
-        }
-
-        // Función para agregar un item al carrito
-        function addItemToCart(name, price) {
-            cart.push({ name, price });
-            // Resetear el cupón aplicado cuando se añade un nuevo item (opcional, depende de la lógica de negocio)
-            // appliedCoupon = null;
-            // couponMessage.textContent = '';
-            // couponInput.value = '';
-            updateCartDisplay();
-        }
-
-        // Función para remover un item del carrito
-        function removeItemFromCart(index) {
-            cart.splice(index, 1);
-             // Resetear el cupón aplicado cuando se remueve un item (opcional)
-            // appliedCoupon = null;
-            // couponMessage.textContent = '';
-            // couponInput.value = '';
-            updateCartDisplay();
-        }
-
-        // Función para aplicar un cupón de descuento
-        function applyCoupon() {
-            const code = couponInput.value.trim().toUpperCase();
-            const validCoupon = coupons[code];
-
-            if (appliedCoupon) {
-                couponMessage.textContent = "Ya tienes un cupón aplicado.";
-                couponMessage.style.color = "orange";
-                return;
-            }
-
-            if (validCoupon) {
-                appliedCoupon = validCoupon;
-                couponMessage.textContent = validCoupon.message;
-                couponMessage.style.color = "green";
-                updateCartDisplay(); // Recalcular el total con el descuento
-            } else {
-                appliedCoupon = null; // Asegurarse de que no haya cupón aplicado si el código es inválido
-                couponMessage.textContent = "Cupón inválido.";
-                couponMessage.style.color = "red";
-                updateCartDisplay(); // Recalcular el total sin descuento
-            }
-        }
-
-        // Función para generar el mensaje de WhatsApp y redirigir
-        function redirectToWhatsapp() {
-            if (cart.length === 0) {
-                alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
-                return;
-            }
-
-            // Número de teléfono con prefijo de país (51 para Perú)
-            const phoneNumber = "51983882637"; // Número corregido
-
-            let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
-
-            cart.forEach(item => {
-                message += `- ${item.name}: S/ ${item.price.toFixed(2)}\n`;
             });
 
-            const total = parseFloat(cartTotalSpan.textContent.replace('S/ ', ''));
-            message += `\nTotal a pagar: S/ ${total.toFixed(2)}`;
+            // JavaScript para el carrito de compras y cupones
+            const cartIcon = document.getElementById('cart-icon');
+            const cartModal = document.getElementById('cart-modal');
+            const closeCartButton = document.getElementById('close-cart');
+            const overlay = document.getElementById('overlay');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSubtotalSpan = document.getElementById('cart-subtotal');
+            const cartTotalSpan = document.getElementById('cart-total');
+            const cartDiscountSpan = document.getElementById('cart-discount');
+            const discountRow = document.getElementById('discount-row');
+            const cartCountSpan = document.getElementById('cart-count');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const couponInput = document.getElementById('coupon-input');
+            const applyCouponButton = document.getElementById('apply-coupon-btn');
+            const couponMessage = document.getElementById('coupon-message');
+            const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
 
-            // Codificar el mensaje para la URL
-            const encodedMessage = encodeURIComponent(message);
+            let cart = []; // Array para almacenar los items del carrito
+            let appliedCoupon = null; // Variable para almacenar el cupón aplicado
 
-            // Construir la URL de WhatsApp
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            // Define tus cupones de descuento aquí
+            const coupons = {
+                "DESC10": { type: "percentage", value: 10, message: "10% de descuento aplicado!" }, // 10% de descuento
+                "OFERTA5": { type: "fixed", value: 5.00, message: "S/ 5.00 de descuento aplicado!" } // S/ 5.00 de descuento fijo
+                // Puedes añadir más cupones aquí
+            };
 
-            // Redirigir al usuario a WhatsApp
-            window.open(whatsappUrl, '_blank'); // Abre en una nueva pestaña
-        }
+            // Función para actualizar la visualización del carrito
+            function updateCartDisplay() {
+                cartItemsContainer.innerHTML = ''; // Limpiar el contenido actual del carrito
+                let subtotal = 0;
+
+                if (cart.length === 0) {
+                    emptyCartMessage.style.display = 'block';
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                    cart.forEach((item, index) => {
+                        const itemElement = document.createElement('div');
+                        itemElement.classList.add('flex', 'justify-between', 'items-center', 'border-b', 'pb-2');
+                        itemElement.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${item.name}</p>
+                                <p class="text-sm text-gray-600">S/ ${item.price.toFixed(2)}</p>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700 text-xl remove-from-cart" data-index="${index}">×</button>
+                        `;
+                        cartItemsContainer.appendChild(itemElement);
+                        subtotal += item.price;
+                    });
+                }
+
+                cartSubtotalSpan.textContent = `S/ ${subtotal.toFixed(2)}`;
+
+                // Calcular y mostrar el descuento si hay un cupón aplicado
+                let discount = 0;
+                if (appliedCoupon) {
+                    if (appliedCoupon.type === "percentage") {
+                        discount = (subtotal * appliedCoupon.value) / 100;
+                        cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)} (${appliedCoupon.value}%)`;
+                    } else if (appliedCoupon.type === "fixed") {
+                        discount = appliedCoupon.value;
+                        cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)}`;
+                    }
+                    discountRow.classList.remove('hidden'); // Mostrar la fila de descuento
+                } else {
+                    discountRow.classList.add('hidden'); // Ocultar la fila de descuento
+                    cartDiscountSpan.textContent = `- S/ 0.00`;
+                }
+
+                const total = subtotal - discount;
+                cartTotalSpan.textContent = `S/ ${Math.max(0, total).toFixed(2)}`; // Asegura que el total no sea negativo
+
+                cartCountSpan.textContent = cart.length; // Actualizar el contador del carrito
+            }
+
+            // Función para agregar un item al carrito
+            function addItemToCart(name, price) {
+                cart.push({ name, price });
+                // Resetear el cupón aplicado cuando se añade un nuevo item (opcional, depende de la lógica de negocio)
+                // appliedCoupon = null;
+                // couponMessage.textContent = '';
+                // couponInput.value = '';
+                updateCartDisplay();
+            }
+
+            // Función para remover un item del carrito
+            function removeItemFromCart(index) {
+                cart.splice(index, 1);
+                 // Resetear el cupón aplicado cuando se remueve un item (opcional)
+                // appliedCoupon = null;
+                // couponMessage.textContent = '';
+                // couponInput.value = '';
+                updateCartDisplay();
+            }
+
+            // Función para aplicar un cupón de descuento
+            function applyCoupon() {
+                const code = couponInput.value.trim().toUpperCase();
+                const validCoupon = coupons[code];
+
+                if (appliedCoupon) {
+                    couponMessage.textContent = "Ya tienes un cupón aplicado.";
+                    couponMessage.style.color = "orange";
+                    return;
+                }
+
+                if (validCoupon) {
+                    appliedCoupon = validCoupon;
+                    couponMessage.textContent = validCoupon.message;
+                    couponMessage.style.color = "green";
+                    updateCartDisplay(); // Recalcular el total con el descuento
+                } else {
+                    appliedCoupon = null; // Asegurarse de que no haya cupón aplicado si el código es inválido
+                    couponMessage.textContent = "Cupón inválido.";
+                    couponMessage.style.color = "red";
+                    updateCartDisplay(); // Recalcular el total sin descuento
+                }
+            }
+
+            // Función para generar el mensaje de WhatsApp y redirigir
+            function redirectToWhatsapp() {
+                if (cart.length === 0) {
+                    alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
+                    return;
+                }
+
+                // Número de teléfono con prefijo de país (51 para Perú)
+                const phoneNumber = "51983882637"; // Número corregido
+
+                let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
+
+                cart.forEach(item => {
+                    message += `- ${item.name}: S/ ${item.price.toFixed(2)}\n`;
+                });
+
+                const total = parseFloat(cartTotalSpan.textContent.replace('S/ ', ''));
+                message += `\nTotal a pagar: S/ ${total.toFixed(2)}`;
+
+                // Codificar el mensaje para la URL
+                const encodedMessage = encodeURIComponent(message);
+
+                // Construir la URL de WhatsApp
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+                // Redirigir al usuario a WhatsApp
+                window.open(whatsappUrl, '_blank'); // Abre en una nueva pestaña
+            }
 
 
-        // Event Listeners para los botones "Agregar al Carrito"
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const itemCard = this.closest('.card');
-                const itemName = itemCard.dataset.name;
-                const itemPrice = parseFloat(itemCard.dataset.price);
-                addItemToCart(itemName, itemPrice);
+            // Event Listeners para los botones "Agregar al Carrito"
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemCard = this.closest('.card');
+                    const itemName = itemCard.dataset.name;
+                    const itemPrice = parseFloat(itemCard.dataset.price);
+                    addItemToCart(itemName, itemPrice);
+                });
             });
-        });
 
-        // Event Listener para remover items del carrito (delegación de eventos)
-        cartItemsContainer.addEventListener('click', function(event) {
-            if (event.target.classList.contains('remove-from-cart')) {
-                const index = event.target.dataset.index;
-                removeItemFromCart(index);
-            }
-        });
+            // Event Listener para remover items del carrito (delegación de eventos)
+            cartItemsContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-from-cart')) {
+                    const index = event.target.dataset.index;
+                    removeItemFromCart(index);
+                }
+            });
 
-        // Event Listener para el botón "Aplicar Cupón"
-        applyCouponButton.addEventListener('click', applyCoupon);
+            // Event Listener para el botón "Aplicar Cupón"
+            applyCouponButton.addEventListener('click', applyCoupon);
 
-         // Event Listener para aplicar cupón al presionar Enter en el input
-        couponInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevenir el envío del formulario si estuviera dentro de uno
-                applyCoupon();
-            }
-        });
+             // Event Listener para aplicar cupón al presionar Enter en el input
+            couponInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevenir el envío del formulario si estuviera dentro de uno
+                    applyCoupon();
+                }
+            });
 
-        // Event Listener para el botón "Proceder al Pago"
-        checkoutButton.addEventListener('click', redirectToWhatsapp);
+            // Event Listener para el botón "Proceder al Pago"
+            checkoutButton.addEventListener('click', redirectToWhatsapp);
 
 
-        // Event Listener para abrir el carrito
-        cartIcon.addEventListener('click', function() {
-            cartModal.classList.add('open');
-            overlay.classList.add('open');
-        });
+            // Event Listener para abrir el carrito
+            cartIcon.addEventListener('click', function() {
+                cartModal.classList.add('open');
+                overlay.classList.add('open');
+            });
 
-        // Event Listener para cerrar el carrito
-        closeCartButton.addEventListener('click', function() {
-            cartModal.classList.remove('open');
-            overlay.classList.remove('open');
-        });
+            // Event Listener para cerrar el carrito
+            closeCartButton.addEventListener('click', function() {
+                cartModal.classList.remove('open');
+                overlay.classList.remove('open');
+            });
 
-        // Event Listener para cerrar el carrito al hacer click en el overlay
-        overlay.addEventListener('click', function() {
-            cartModal.classList.remove('open');
-            overlay.classList.remove('open');
-        });
+            // Event Listener para cerrar el carrito al hacer click en el overlay
+            overlay.addEventListener('click', function() {
+                cartModal.classList.remove('open');
+                overlay.classList.remove('open');
+            });
 
-        // Inicializar la visualización del carrito al cargar la página
-        updateCartDisplay();
-
+            // Inicializar la visualización del carrito al cargar la página
+            updateCartDisplay();
+        }); // Cierre del DOMContentLoaded
     </script>
 
 </body>

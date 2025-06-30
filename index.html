@@ -6,6 +6,7 @@
     <title>Skinner Store - Tests y Libros Psicológicos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Volvemos a la fuente Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* Estilos personalizados - Vuelven al diseño anterior */
@@ -41,6 +42,14 @@
              text-transform: none; /* Sin mayúsculas forzadas */
              letter-spacing: normal; /* Espaciado normal */
              font-weight: 800; /* Extra bold */
+             /* Animación de parpadeo */
+             animation: blink 1.5s infinite alternate; /* 1.5 segundos, infinito, alternando */
+        }
+        /* Definición de la animación de parpadeo */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
         }
         header nav ul {
             display: flex;
@@ -65,55 +74,6 @@
         }
         .header-icons button:hover {
              color: #e2e8f0; /* Gris claro al pasar el ratón */
-        }
-        .header-icons .relative {
-            position: relative;
-        }
-        .header-icons .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #f56565; /* Rojo */
-            color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border-radius: 9999px; /* Forma redonda */
-            height: 20px;
-            width: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-
-        .card {
-            background-color: white; /* Fondo de tarjeta blanco */
-            border: 1px solid #e2e8f0; /* Borde gris claro */
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .card:hover {
-            transform: translateY(-8px); /* Efecto de elevación */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
-        }
-        .btn-primary {
-            background-color: #4c51bf; /* Morado oscuro */
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem; /* Bordes más redondeados */
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #5a67d8; /* Morado más claro al pasar el ratón */
-        }
-         .btn-secondary {
-            background-color: #e2e8f0; /* Gris claro */
-            color: #2d3748; /* Texto oscuro */
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            transition: background-color 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #cbd5e0; /* Gris un poco más oscuro al pasar el ratón */
         }
         /* Estilos para el dropdown */
         .dropdown {
@@ -270,6 +230,71 @@
             color: #2d3748; /* Gris oscuro */
           }
 
+        /* Estilos para el botón flotante del carrito */
+        .fixed-cart-button {
+            position: fixed;
+            bottom: 2rem; /* 32px desde abajo */
+            right: 2rem; /* 32px desde la derecha */
+            background-color: #4c51bf; /* Morado oscuro */
+            color: white;
+            padding: 1rem; /* Aumentar el padding para que sea un botón más grande */
+            border-radius: 9999px; /* Completamente redondo */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Sombra más pronunciada */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 90; /* Asegurar que esté por encima de la mayoría de los elementos, pero por debajo del modal */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none; /* Eliminar borde por defecto del botón */
+        }
+
+        .fixed-cart-button:hover {
+            background-color: #5a67d8; /* Morado más claro al pasar el ratón */
+            transform: scale(1.05); /* Ligeramente más grande al pasar el ratón */
+        }
+
+        .fixed-cart-button .cart-count {
+            position: absolute;
+            top: -10px; /* Ajustar posición para el contador */
+            right: -10px; /* Ajustar posición para el contador */
+            background-color: #f56565; /* Rojo */
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 9999px;
+            height: 20px;
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilos para el botón flotante de WhatsApp */
+        .fixed-whatsapp-button {
+            position: fixed;
+            bottom: 7rem; /* 112px desde abajo (2rem para carrito + 3rem de espacio + 2rem para whatsapp) */
+            right: 2rem; /* 32px desde la derecha, igual que el carrito */
+            background-color: #25D366; /* Verde de WhatsApp */
+            color: white;
+            padding: 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 90;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+
+        .fixed-whatsapp-button:hover {
+            background-color: #1DA851; /* Verde más oscuro al pasar el ratón */
+            transform: scale(1.05);
+        }
+
+
         /* Contacto y Footer */
         #contact {
              background-color: white; /* Fondo blanco */
@@ -334,10 +359,7 @@
                     <button class="text-xl hover:text-gray-200 transition duration-300">
                          <i class="fas fa-search"></i>
                     </button>
-                    <button id="cart-icon" class="relative text-xl hover:text-gray-200 transition duration-300">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="cart-count">0</span>
-                    </button>
+                    <!-- El botón del carrito ha sido movido para ser flotante -->
                 </div>
             </div>
         </div>
@@ -378,6 +400,17 @@
             <button id="checkout-button" class="btn-primary w-full mt-6 text-center">Proceder al Pago</button>
         </div>
     </div>
+
+    <!-- Botón flotante de WhatsApp -->
+    <button id="whatsapp-button" class="fixed-whatsapp-button text-xl">
+        <i class="fab fa-whatsapp"></i>
+    </button>
+
+    <!-- Botón flotante del carrito de compras -->
+    <button id="cart-icon" class="fixed-cart-button text-xl">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count" class="cart-count">0</span>
+    </button>
 
     <main class="container mx-auto mt-10 p-6 flex-grow">
         <section class="text-center mb-16">
@@ -738,6 +771,7 @@
             const applyCouponButton = document.getElementById('apply-coupon-btn');
             const couponMessage = document.getElementById('coupon-message');
             const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
+            const whatsappButton = document.getElementById('whatsapp-button'); // Nuevo botón de WhatsApp
 
             let cart = []; // Array para almacenar los items del carrito
             let appliedCoupon = null; // Variable para almacenar el cupón aplicado
@@ -843,25 +877,12 @@
 
             // Función para generar el mensaje de WhatsApp y redirigir
             function redirectToWhatsapp() {
-                if (cart.length === 0) {
-                    alert("El carrito está vacío. Agrega productos antes de proceder al pago.");
-                    return;
-                }
-
                 // Número de teléfono con prefijo de país (51 para Perú)
                 const phoneNumber = "51983882637"; // Número corregido
-
-                let message = "¡Hola! Me gustaría realizar un pedido con los siguientes productos:\n\n";
-
-                cart.forEach(item => {
-                    message += `- ${item.name}: S/ ${item.price.toFixed(2)}\n`;
-                });
-
-                const total = parseFloat(cartTotalSpan.textContent.replace('S/ ', ''));
-                message += `\nTotal a pagar: S/ ${total.toFixed(2)}`;
+                const defaultMessage = "¡Hola! Estoy interesado en los tests y libros de Skinner Store. ¿Podrías darme más información?";
 
                 // Codificar el mensaje para la URL
-                const encodedMessage = encodeURIComponent(message);
+                const encodedMessage = encodeURIComponent(defaultMessage);
 
                 // Construir la URL de WhatsApp
                 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
@@ -902,6 +923,9 @@
 
             // Event Listener para el botón "Proceder al Pago" - Redirige a WhatsApp
             checkoutButton.addEventListener('click', redirectToWhatsapp);
+
+            // Event Listener para el botón flotante de WhatsApp
+            whatsappButton.addEventListener('click', redirectToWhatsapp);
 
 
             // Event Listener para abrir el carrito

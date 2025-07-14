@@ -6,28 +6,28 @@
     <title>Skinner Store - Tests y Libros Psicológicos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Volvemos a la fuente Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Estilos personalizados - Vuelven al diseño anterior */
+        /* Estilos personalizados */
         body {
-            font-family: 'Inter', sans-serif; /* Fuente Inter */
-            background-color: #f0f4f8; /* Fondo más suave */
-            color: #1a202c; /* Texto oscuro */
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Fondo más claro y moderno */
+            color: #1f2937; /* Texto oscuro para mayor contraste */
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         h1, h2, h3, h4, h5 {
-             font-family: 'Inter', sans-serif; /* Títulos también en Inter */
-             color: #2d3748; /* Gris oscuro para títulos */
+             font-family: 'Inter', sans-serif;
+             color: #1f2937; /* Gris oscuro para títulos */
         }
-         /* Estilos del encabezado - Mantiene la estructura moderna pero con estilos anteriores */
+        /* Estilos del encabezado */
         header {
-            background-color: #4c51bf; /* Morado oscuro */
+            background-color: #1d4ed8; /* Azul base para el gradiente */
+            background-image: linear-gradient(to right, #1d4ed8, #20c997); /* Gradiente de azul a verde azulado */
             color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
         }
         header .container {
              display: flex;
@@ -37,43 +37,41 @@
              padding-bottom: 1.5rem;
         }
         header h1 {
-            font-size: 2.5rem; /* Tamaño de título ajustado */
-             color: white; /* Título blanco */
-             text-transform: none; /* Sin mayúsculas forzadas */
-             letter-spacing: normal; /* Espaciado normal */
-             font-weight: 800; /* Extra bold */
-             /* Animación de parpadeo */
-             animation: blink 1.5s infinite alternate; /* 1.5 segundos, infinito, alternando */
+            font-size: 2.5rem;
+             color: white;
+             text-transform: none;
+             letter-spacing: normal;
+             font-weight: 800;
+             animation: blink 1.5s infinite alternate;
         }
-        /* Definición de la animación de parpadeo */
         @keyframes blink {
             0% { opacity: 1; }
-            50% { opacity: 0; }
+            50% { opacity: 0.2; } /* Menos opaco en el punto medio para un parpadeo más suave */
             100% { opacity: 1; }
         }
         header nav ul {
             display: flex;
             align-items: center;
-            gap: 1.5rem; /* Espacio entre elementos del menú */
+            gap: 1.5rem;
         }
         header nav a {
-            color: white; /* Texto blanco */
+            color: white;
             transition: color 0.3s ease;
         }
         header nav a:hover {
-            color: #e2e8f0; /* Gris claro al pasar el ratón */
+            color: #e0f2f7; /* Un blanco azulado al pasar el ratón */
         }
         .header-icons {
             display: flex;
             align-items: center;
-            gap: 1.5rem; /* Espacio entre iconos */
+            gap: 1.5rem;
         }
         .header-icons button {
-            color: white; /* Color de icono blanco */
+            color: white;
             transition: color 0.3s ease;
         }
         .header-icons button:hover {
-             color: #e2e8f0; /* Gris claro al pasar el ratón */
+             color: #e0f2f7;
         }
         /* Estilos para el dropdown */
         .dropdown {
@@ -83,7 +81,7 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9; /* Fondo claro */
+            background-color: #ffffff; /* Fondo blanco */
             min-width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
@@ -91,109 +89,105 @@
             overflow: hidden;
             top: 100%;
             left: 0;
-            border: none; /* Sin borde específico */
+            border: 1px solid #e2e8f0; /* Borde sutil */
         }
         .dropdown-content a {
-            color: #333; /* Texto oscuro */
+            color: #333;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
             transition: background-color 0.2s ease;
         }
         .dropdown-content a:hover {
-            background-color: #e2e8f0; /* Fondo gris claro al pasar el ratón */
-            color: #333; /* Texto oscuro */
+            background-color: #e9ecef; /* Gris muy claro al pasar el ratón */
+            color: #1f2937;
         }
-         /* Opcional: Mostrar dropdown al hacer click (requiere JS) */
         .dropdown.active .dropdown-content {
             display: block;
         }
 
         /* Estilos para el carrito (modal/sidebar) */
         .cart-modal {
-            display: none; /* Oculto por defecto */
+            display: none;
             position: fixed;
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 400px; /* Ancho máximo del carrito */
+            max-width: 400px;
             height: 100%;
-            background-color: white; /* Fondo blanco */
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1); /* Sombra suave */
+            background-color: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.15);
             z-index: 100;
-            overflow-y: auto; /* Scroll si el contenido es largo */
+            overflow-y: auto;
             transition: transform 0.3s ease-in-out;
-            transform: translateX(100%); /* Inicialmente fuera de pantalla */
-            color: #1a202c; /* Texto oscuro */
+            transform: translateX(100%);
+            color: #1f2937;
         }
         .cart-modal.open {
             display: block;
-            transform: translateX(0); /* Entra en pantalla */
+            transform: translateX(0);
         }
         .overlay {
-            display: none; /* Oculto por defecto */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 50;
         }
          .overlay.open {
             display: block;
         }
          .cart-modal h3 {
-            color: #2d3748; /* Gris oscuro para el título del carrito */
+            color: #1f2937;
          }
-         .cart-modal .border-b {
-             border-bottom-color: #e2e8f0; /* Borde sutil */
-         }
-         .cart-modal .border-t {
-             border-top-color: #e2e8f0; /* Borde sutil */
+         .cart-modal .border-b, .cart-modal .border-t {
+             border-color: #e2e8f0;
          }
          .cart-modal .text-gray-500 {
-             color: #a0aec0; /* Gris claro */
+             color: #6b7280;
          }
          .cart-modal .text-gray-600 {
-             color: #718096; /* Gris */
+             color: #4b5563;
          }
          .cart-modal .text-gray-800 {
-             color: #2d3748; /* Texto oscuro */
+             color: #1f2937;
          }
          .cart-modal .text-red-500 {
-             color: #e53e3e; /* Rojo */
+             color: #ef4444;
          }
          .cart-modal .hover:text-red-700:hover {
-             color: #c53030; /* Rojo más oscuro al pasar el ratón */
+             color: #dc2626;
          }
          .cart-modal .text-green-600 {
-             color: #38a169; /* Verde */
+             color: #10b981;
          }
          .cart-modal input[type="text"] {
-            background-color: white; /* Fondo de input blanco */
-            border-color: #cbd5e0; /* Borde gris */
-            color: #2d3748; /* Texto oscuro */
+            background-color: white;
+            border-color: #d1d5db;
+            color: #1f2937;
          }
           .cart-modal input[type="text"]::placeholder {
-            color: #a0aec0; /* Placeholder gris claro */
+            color: #9ca3af;
          }
          .cart-modal input[type="text"]:focus {
-            border-color: #4c51bf; /* Borde morado al enfocar */
-            box-shadow: 0 0 0 1px #4c51bf;
+            border-color: #2563eb; /* Azul más vibrante al enfocar */
+            box-shadow: 0 0 0 1px #2563eb;
          }
 
 
         /* Estilos para videos responsivos */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             max-width: 100%;
             background: #000;
-            border-radius: 0.5rem; /* Bordes redondeados para el contenedor */
-             border: none; /* Sin borde específico */
+            border-radius: 0.5rem;
+            border: none;
         }
 
         .video-container iframe {
@@ -205,15 +199,15 @@
         }
 
         /* Estilos para las imágenes en la galería */
-        .image-gallery img {
-            width: 100%; /* Ajusta el ancho de la imagen al contenedor */
-            height: auto; /* Mantiene la proporción */
-            border-radius: 0.5rem; /* Bordes redondeados */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-             border: none; /* Sin borde específico */
+        .image-gallery img, .product-card-image {
+            width: 100%;
+            height: 180px; /* Altura fija para las imágenes de los productos */
+            object-fit: cover; /* Asegura que la imagen cubra el área sin distorsión */
+            border-radius: 0.5rem;
+            margin-bottom: 1rem; /* Espacio debajo de la imagen */
         }
          .image-item {
-            background-color: white; /* Fondo blanco */
+            background-color: white;
             padding: 1rem;
             border-radius: 0.75rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -221,44 +215,77 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            border: 1px solid #e2e8f0; /* Borde sutil */
+            border: 1px solid #e5e7eb; /* Borde más claro */
          }
           .image-item h4, .image-item h5 {
             margin-top: 0.75rem;
-            font-size: 1.125rem; /* text-xl */
-            font-weight: 600; /* font-semibold */
-            color: #2d3748; /* Gris oscuro */
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
           }
+
+        /* Animación de "pulse" para el botón del carrito (morado) */
+        @keyframes pulse-purple {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 81, 191, 0.7); /* Color morado con opacidad */
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(76, 81, 191, 0); /* Onda más grande y desvanecida */
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(76, 81, 191, 0);
+            }
+        }
+
+        /* Animación de "pulse" para el botón de WhatsApp (verde) */
+        @keyframes pulse-green {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); /* Color verde con opacidad */
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); /* Onda más grande y desvanecida */
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
 
         /* Estilos para el botón flotante del carrito */
         .fixed-cart-button {
             position: fixed;
-            bottom: 2rem; /* 32px desde abajo */
-            right: 2rem; /* 32px desde la derecha */
+            bottom: 2rem;
+            right: 2rem;
             background-color: #4c51bf; /* Morado oscuro */
             color: white;
-            padding: 1rem; /* Aumentar el padding para que sea un botón más grande */
-            border-radius: 9999px; /* Completamente redondo */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Sombra más pronunciada */
+            padding: 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 90; /* Asegurar que esté por encima de la mayoría de los elementos, pero por debajo del modal */
+            z-index: 90;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            border: none; /* Eliminar borde por defecto del botón */
+            border: none;
+            animation: pulse-purple 2s infinite;
         }
 
         .fixed-cart-button:hover {
-            background-color: #5a67d8; /* Morado más claro al pasar el ratón */
-            transform: scale(1.05); /* Ligeramente más grande al pasar el ratón */
+            background-color: #5a67d8;
+            transform: scale(1.05);
         }
 
         .fixed-cart-button .cart-count {
             position: absolute;
-            top: -10px; /* Ajustar posición para el contador */
-            right: -10px; /* Ajustar posición para el contador */
-            background-color: #f56565; /* Rojo */
+            top: -10px;
+            right: -10px;
+            background-color: #ef4444; /* Rojo */
             color: white;
             font-size: 0.75rem;
             font-weight: bold;
@@ -273,8 +300,8 @@
         /* Estilos para el botón flotante de WhatsApp */
         .fixed-whatsapp-button {
             position: fixed;
-            bottom: 7rem; /* 112px desde abajo (2rem para carrito + 3rem de espacio + 2rem para whatsapp) */
-            right: 2rem; /* 32px desde la derecha, igual que el carrito */
+            bottom: 7rem;
+            right: 2rem;
             background-color: #25D366; /* Verde de WhatsApp */
             color: white;
             padding: 1rem;
@@ -287,44 +314,102 @@
             z-index: 90;
             transition: background-color 0.3s ease, transform 0.2s ease;
             border: none;
+            animation: pulse-green 2s infinite;
         }
 
         .fixed-whatsapp-button:hover {
-            background-color: #1DA851; /* Verde más oscuro al pasar el ratón */
+            background-color: #1DA851;
             transform: scale(1.05);
         }
 
+        /* Estilos para la barra de envíos */
+        .shipping-bar {
+            background-color: #0d9488; /* Verde azulado más oscuro */
+            color: white;
+            text-align: center;
+            padding: 0.75rem 0;
+            font-size: 1.125rem;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        /* Estilos para la barra de promociones */
+        .promotions-bar {
+            background-color: #6d28d9; /* Morado más vibrante */
+            color: white;
+            text-align: center;
+            padding: 0.75rem 0;
+            font-size: 1.125rem;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideInDown 0.7s ease-out;
+            margin-top: 0.1rem;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Botones generales */
+        .btn-primary {
+            background-color: #2563eb; /* Azul más vibrante */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Azul más oscuro al pasar el ratón */
+        }
+        .btn-secondary {
+            background-color: #e5e7eb; /* Gris claro */
+            color: #1f2937;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db; /* Gris más oscuro al pasar el ratón */
+            color: #111827;
+        }
 
         /* Contacto y Footer */
         #contact {
-             background-color: white; /* Fondo blanco */
-             border: 1px solid #e2e8f0; /* Borde sutil */
-             color: #2d3748; /* Texto oscuro */
+             background-color: white;
+             border: 1px solid #e5e7eb;
+             color: #1f2937;
         }
         #contact h3, #contact h4 {
-            color: #2d3748; /* Gris oscuro */
+            color: #1f2937;
         }
         #contact .text-gray-700 {
-            color: #4a5568; /* Gris */
+            color: #4b5563;
         }
          #contact .text-blue-600 {
-             color: #3182ce; /* Azul */
+             color: #2563eb; /* Azul vibrante */
          }
          #contact .text-green-500 {
-             color: #38a169; /* Verde */
+             color: #10b981; /* Verde vibrante */
          }
          #contact a {
-             color: #4c51bf; /* Morado */
+             color: #2563eb;
          }
           #contact a:hover {
-             color: #5a67d8; /* Morado más claro al pasar el ratón */
+             color: #1d4ed8;
           }
 
         footer {
-            background-color: #2d3748; /* Fondo oscuro para el footer */
-            color: #cbd5e0; /* Gris claro */
+            background-color: #1f2937; /* Fondo oscuro para el footer */
+            color: #d1d5db; /* Gris claro */
         }
-
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -364,6 +449,16 @@
             </div>
         </div>
     </header>
+
+    <!-- Barra de envíos a todo el Perú -->
+    <div class="shipping-bar">
+        <span>¡Envíos a todo el Perú!</span>
+    </div>
+
+    <!-- Nueva barra de descuentos y promociones -->
+    <div class="promotions-bar">
+        <span>¡Descuentos y promociones por la compra de más de un producto!</span>
+    </div>
 
     <div id="overlay" class="overlay"></div>
 
@@ -418,11 +513,13 @@
             <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Accede a una variedad de recursos para tu crecimiento personal: tests psicológicos profesionales y una selección de libros especializados.</p>
         </section>
 
+        <!-- Sección de Tests -->
         <section id="tests" class="mb-16">
             <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Nuestros Tests Disponibles</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="WISC-V" data-price="230.00">
+                    <img src="https://i.postimg.cc/jdmfLXLw/wisc-v.jpg" alt="Imagen WISC-V" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">WISC-V</h4>
                     <p class="text-gray-700 mb-6">Escala Wechsler de Inteligencia para Niños - Quinta Edición.</p>
                     <div class="flex justify-between items-center">
@@ -432,6 +529,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="WAIS-IV" data-price="230.00">
+                    <img src="https://i.postimg.cc/63fVZGDs/wais-iv.jpg" alt="Imagen WAIS-IV" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">WAIS-IV</h4>
                     <p class="text-gray-700 mb-6">Escala Wechsler de Inteligencia para Adultos - Cuarta Edición.</p>
                     <div class="flex justify-between items-center">
@@ -441,6 +539,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Rías & Reynold" data-price="170.00">
+                    <img src="https://i.postimg.cc/x8QxDQSQ/Imagen-de-Whats-App-2025-05-23-a-las-16-06-40-d8b2d1e0.jpg" alt="Imagen Rías & Reynold" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Rías & Reynold</h4>
                     <p class="text-gray-700 mb-6">Test de Habilidades Cognitivas de Reynolds.</p>
                     <div class="flex justify-between items-center">
@@ -450,6 +549,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Raven" data-price="55.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Raven" alt="Imagen Test de Raven" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Raven</h4>
                     <p class="text-gray-700 mb-6">Matrices Progresivas de Raven.</p>
                     <div class="flex justify-between items-center">
@@ -459,6 +559,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Benton" data-price="55.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Benton" alt="Imagen Test de Benton" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Benton</h4>
                     <p class="text-gray-700 mb-6">Test de Retención Visual de Benton.</p>
                     <div class="flex justify-between items-center">
@@ -468,6 +569,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Koppitz 2" data-price="55.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Koppitz+2" alt="Imagen Test de Koppitz 2" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Koppitz 2</h4>
                     <p class="text-gray-700 mb-6">Test Gestáltico Visomotor de Bender-Koppitz (Segunda Edición).</p>
                     <div class="flex justify-between items-center">
@@ -477,6 +579,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Cumanin" data-price="55.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Cumanin" alt="Imagen Test de Cumanin" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Cumanin</h4>
                     <p class="text-gray-700 mb-6">Cuestionario de Madurez Neuropsicológica Infantil.</p>
                     <div class="flex justify-between items-center">
@@ -486,6 +589,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Neuropsi" data-price="50.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Neuropsi" alt="Imagen Test de Neuropsi" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Neuropsi</h4>
                     <p class="text-gray-700 mb-6">Evaluación Neuropsicológica Breve en Español.</p>
                     <div class="flex justify-between items-center">
@@ -495,6 +599,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Figura Compleja del Rey" data-price="50.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+Figura+Rey" alt="Imagen Test de Figura Compleja del Rey" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Figura Compleja del Rey</h4>
                     <p class="text-gray-700 mb-6">Evalúa la organización perceptiva y la memoria visual.</p>
                     <div class="flex justify-between items-center">
@@ -504,6 +609,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de CPQ" data-price="60.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+CPQ" alt="Imagen Test de CPQ" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de CPQ</h4>
                     <p class="text-gray-700 mb-6">Cuestionario de Personalidad para Niños.</p>
                     <div class="flex justify-between items-center">
@@ -513,6 +619,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test ESPQ" data-price="60.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+ESPQ" alt="Imagen Test ESPQ" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test ESPQ</h4>
                     <p class="text-gray-700 mb-6">Cuestionario de Personalidad para Niños de 8 a 12 años.</p>
                     <div class="flex justify-between items-center">
@@ -522,6 +629,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Minimental" data-price="60.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Minimental" alt="Imagen Minimental" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Minimental</h4>
                     <p class="text-gray-700 mb-6">Mini-Examen Cognoscitivo (Folstein).</p>
                     <div class="flex justify-between items-center">
@@ -530,7 +638,8 @@
                     </div>
                 </div>
 
-                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Figura Humana" data-price="39.00">
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de la Figura Humana" data-price="39.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+Figura+Humana" alt="Imagen Test de la Figura Humana" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de la Figura Humana</h4>
                     <p class="text-gray-700 mb-6">Test Proyectivo para evaluar la personalidad a través del dibujo.</p>
                     <div class="flex justify-between items-center">
@@ -539,7 +648,8 @@
                     </div>
                 </div>
 
-                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Persona Bajo la Lluvia" data-price="39.00">
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de la Persona Bajo la Lluvia" data-price="39.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+Persona+Lluvia" alt="Imagen Test de la Persona Bajo la Lluvia" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de la Persona Bajo la Lluvia</h4>
                     <p class="text-gray-700 mb-6">Test Proyectivo para evaluar la personalidad y recursos de afrontamiento.</p>
                     <div class="flex justify-between items-center">
@@ -548,7 +658,8 @@
                     </div>
                 </div>
 
-                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Proyectivo: Colores (Luscher)" data-price="49.00">
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Colores (Luscher)" data-price="49.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+Colores+Luscher" alt="Imagen Test de Colores (Luscher)" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Colores (Luscher)</h4>
                     <p class="text-gray-700 mb-6">Test Proyectivo para evaluar el estado psicológico a través de la elección de colores.</p>
                     <div class="flex justify-between items-center">
@@ -558,6 +669,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Bar-On (Niños y Adolescentes)" data-price="55.00">
+                    <img src="https://i.postimg.cc/6pk4WLMW/test-Bar-on-ni-os.jpg" alt="Imagen Test Bar-On Niños y Adolescentes" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test Bar-On (Niños y Adolescentes)</h4>
                     <p class="text-gray-700 mb-6">Inventario de Inteligencia Emocional de BarOn ICE: NA, adaptado para niños y adolescentes.</p>
                     <div class="flex justify-between items-center">
@@ -567,6 +679,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test Bar-On (Adultos)" data-price="55.00">
+                    <img src="https://i.postimg.cc/5NkFGMvF/test-Bar-on-adultos.jpg" alt="Imagen Test Bar-On Adultos" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test Bar-On (Adultos)</h4>
                     <p class="text-gray-700 mb-6">Inventario de Cociente Emocional de BarOn, para la medida de la inteligencia emocional en adultos.</p>
                     <div class="flex justify-between items-center">
@@ -579,11 +692,13 @@
             </div>
         </section>
 
+        <!-- Sección de Libros -->
         <section id="books" class="mb-16">
             <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Libros Especializados</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
-                <div id="book-kit" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Kit de Libros DSM-5 y Cie 10" data-price="80.00">
+                <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Kit de Libros DSM-5 y Cie 10" data-price="80.00">
+                    <img src="https://i.postimg.cc/vZvGp8FY/Imagen-de-Whats-App-2025-05-19-a-las-14-56-46-a348c3d6.jpg" alt="Imagen Kit de Libros DSM-5 y Cie 10" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Kit de Libros DSM-5 y Cie 10</h4>
                     <p class="text-gray-700 mb-6">Obtén el Manual Diagnóstico y Estadístico de los Trastornos Mentales (DSM-5) y la Clasificación Estadística Internacional de Enfermedades y Problemas Relacionados con la Salud (CIE-10) juntos.</p>
                     <div class="flex justify-between items-center">
@@ -592,7 +707,8 @@
                     </div>
                 </div>
 
-                 <div id="book-dsm5" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro DSM-5" data-price="65.00">
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro DSM-5" data-price="65.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Libro+DSM-5" alt="Imagen Libro DSM-5 (Separado)" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Libro DSM-5 (Separado)</h4>
                     <p class="text-gray-700 mb-6">Manual Diagnóstico y Estadístico de los Trastornos Mentales - Quinta Edición.</p>
                     <div class="flex justify-between items-center">
@@ -601,7 +717,8 @@
                     </div>
                 </div>
 
-                 <div id="book-cie10" class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro Cie 10" data-price="35.00">
+                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro Cie 10" data-price="35.00">
+                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Libro+Cie+10" alt="Imagen Libro Cie 10 (Separado)" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Libro Cie 10 (Separado)</h4>
                     <p class="text-gray-700 mb-6">Clasificación Estadística Internacional de Enfermedades y Problemas Relacionados con la Salud - Décima Revisión.</p>
                     <div class="flex justify-between items-center">
@@ -613,11 +730,12 @@
                 </div>
         </section>
 
+        <!-- Sección de Recursos Visuales (Videos e Imágenes) -->
         <section id="resources" class="mb-16">
             <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">Recursos Visuales</h3>
 
             <div class="mb-12">
-                 <h4 class="text-2xl font-bold text-gray-800 mb-6 text-center">Videos</h4>
+                 <h4 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Videos</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
                     <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
@@ -640,47 +758,47 @@
             </div>
 
             <div>
-                <h4 class="text-2xl font-bold text-gray-800 mb-6 text-center">Imágenes</h4>
+                <h4 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Imágenes</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 image-gallery">
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Imagen WISC-V</h5>
-                         <img src="https://i.imgur.com/Jrw36Ti.jpeg" alt="Imagen WISC-V">
+                         <img src="https://i.postimg.cc/jdmfLXLw/wisc-v.jpg" alt="Imagen WISC-V">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Imagen WAIS-IV</h5>
-                         <img src="https://i.imgur.com/WMwbvuF.jpeg" alt="Imagen WAIS-IV">
+                         <img src="https://i.postimg.cc/63fVZGDs/wais-iv.jpg" alt="Imagen WAIS-IV">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Rías & Reynold</h5>
-                         <img src="https://i.imgur.com/44VlGs5.jpeg" alt="Imagen Rías & Reynold">
+                         <img src="https://i.postimg.cc/x8QxDQSQ/Imagen-de-Whats-App-2025-05-23-a-las-16-06-40-d8b2d1e0.jpg" alt="Imagen Rías & Reynold">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Vineland-3</h5>
-                         <img src="https://i.imgur.com/JIxtHdh.jpeg" alt="Imagen Vineland-3">
+                         <img src="https://i.postimg.cc/XvT1LFHp/Imagen-de-Whats-App-2025-05-23-a-las-16-06-40-bc83aaa7.jpg" alt="Imagen Vineland-3">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Rías & Reynold (Alternativa)</h5>
-                         <img src="https://i.imgur.com/bgAiU6z.jpeg" alt="Imagen Rías & Reynold (Alternativa)">
+                         <img src="https://i.postimg.cc/SN64MQK6/Imagen-de-Whats-App-2025-05-23-a-las-16-06-40-9ab9409f.jpg" alt="Imagen Rías & Reynold (Alternativa)">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Kit de Libros DSM-5 y Cie 10</h5>
-                         <img src="https://i.imgur.com/P5gYtdB.jpeg" alt="Imagen Kit de Libros DSM-5 y Cie 10">
+                         <img src="https://i.postimg.cc/vZvGp8FY/Imagen-de-Whats-App-2025-05-19-a-las-14-56-46-a348c3d6.jpg" alt="Imagen Kit de Libros DSM-5 y Cie 10">
                     </div>
 
                     <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Test Bar-On (Niños y Adolescentes)</h5>
-                         <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Niños y Adolescentes">
+                         <img src="https://i.postimg.cc/6pk4WLMW/test-Bar-on-ni-os.jpg" alt="Imagen Test Bar-On Niños y Adolescentes">
                     </div>
 
                      <div class="image-item bg-white border border-gray-200">
                          <h5 class="text-xl font-semibold mb-4 text-center">Test Bar-On (Adultos)</h5>
-                         <img src="https://i.imgur.com/go2iYSN.jpeg" alt="Imagen Test Bar-On Adultos">
+                         <img src="https://i.postimg.cc/5NkFGMvF/test-Bar-on-adultos.jpg" alt="Imagen Test Bar-On Adultos">
                     </div>
 
                 </div>
@@ -770,22 +888,19 @@
             const couponInput = document.getElementById('coupon-input');
             const applyCouponButton = document.getElementById('apply-coupon-btn');
             const couponMessage = document.getElementById('coupon-message');
-            const checkoutButton = document.getElementById('checkout-button'); // Seleccionamos el botón de pago
-            const whatsappButton = document.getElementById('whatsapp-button'); // Nuevo botón de WhatsApp
+            const checkoutButton = document.getElementById('checkout-button');
+            const whatsappButton = document.getElementById('whatsapp-button');
 
-            let cart = []; // Array para almacenar los items del carrito
-            let appliedCoupon = null; // Variable para almacenar el cupón aplicado
+            let cart = [];
+            let appliedCoupon = null;
 
-            // Define tus cupones de descuento aquí
             const coupons = {
-                "DESC10": { type: "percentage", value: 10, message: "10% de descuento aplicado!" }, // 10% de descuento
-                "OFERTA5": { type: "fixed", value: 5.00, message: "S/ 5.00 de descuento aplicado!" } // S/ 5.00 de descuento fijo
-                // Puedes añadir más cupones aquí
+                "DESC10": { type: "percentage", value: 10, message: "10% de descuento aplicado!" },
+                "OFERTA5": { type: "fixed", value: 5.00, message: "S/ 5.00 de descuento aplicado!" }
             };
 
-            // Función para actualizar la visualización del carrito
             function updateCartDisplay() {
-                cartItemsContainer.innerHTML = ''; // Limpiar el contenido actual del carrito
+                cartItemsContainer.innerHTML = '';
                 let subtotal = 0;
 
                 if (cart.length === 0) {
@@ -809,7 +924,6 @@
 
                 cartSubtotalSpan.textContent = `S/ ${subtotal.toFixed(2)}`;
 
-                // Calcular y mostrar el descuento si hay un cupón aplicado
                 let discount = 0;
                 if (appliedCoupon) {
                     if (appliedCoupon.type === "percentage") {
@@ -819,39 +933,28 @@
                         discount = appliedCoupon.value;
                         cartDiscountSpan.textContent = `- S/ ${discount.toFixed(2)}`;
                     }
-                    discountRow.classList.remove('hidden'); // Mostrar la fila de descuento
+                    discountRow.classList.remove('hidden');
                 } else {
-                    discountRow.classList.add('hidden'); // Ocultar la fila de descuento
+                    discountRow.classList.add('hidden');
                     cartDiscountSpan.textContent = `- S/ 0.00`;
                 }
 
                 const total = subtotal - discount;
-                cartTotalSpan.textContent = `S/ ${Math.max(0, total).toFixed(2)}`; // Asegura que el total no sea negativo
+                cartTotalSpan.textContent = `S/ ${Math.max(0, total).toFixed(2)}`;
 
-                cartCountSpan.textContent = cart.length; // Actualizar el contador del carrito
+                cartCountSpan.textContent = cart.length;
             }
 
-            // Función para agregar un item al carrito
             function addItemToCart(name, price) {
                 cart.push({ name, price });
-                // Resetear el cupón aplicado cuando se añade un nuevo item (opcional, depende de la lógica de negocio)
-                // appliedCoupon = null;
-                // couponMessage.textContent = '';
-                // couponInput.value = '';
                 updateCartDisplay();
             }
 
-            // Función para remover un item del carrito
             function removeItemFromCart(index) {
                 cart.splice(index, 1);
-                 // Resetear el cupón aplicado cuando se remueve un item (opcional)
-                // appliedCoupon = null;
-                // couponMessage.textContent = '';
-                // couponInput.value = '';
                 updateCartDisplay();
             }
 
-            // Función para aplicar un cupón de descuento
             function applyCoupon() {
                 const code = couponInput.value.trim().toUpperCase();
                 const validCoupon = coupons[code];
@@ -866,31 +969,23 @@
                     appliedCoupon = validCoupon;
                     couponMessage.textContent = validCoupon.message;
                     couponMessage.style.color = "green";
-                    updateCartDisplay(); // Recalcular el total con el descuento
+                    updateCartDisplay();
                 } else {
-                    appliedCoupon = null; // Asegurarse de que no haya cupón aplicado si el código es inválido
+                    appliedCoupon = null;
                     couponMessage.textContent = "Cupón inválido.";
                     couponMessage.style.color = "red";
-                    updateCartDisplay(); // Recalcular el total sin descuento
+                    updateCartDisplay();
                 }
             }
 
-            // Función para generar el mensaje de WhatsApp y redirigir
             function redirectToWhatsapp() {
-                // Número de teléfono con prefijo de país (51 para Perú)
-                const phoneNumber = "51983882637"; // Número corregido
+                const phoneNumber = "51983882637";
+                // Mensaje predeterminado para WhatsApp
                 const defaultMessage = "¡Hola! Estoy interesado en los tests y libros de Skinner Store. ¿Podrías darme más información?";
-
-                // Codificar el mensaje para la URL
                 const encodedMessage = encodeURIComponent(defaultMessage);
-
-                // Construir la URL de WhatsApp
                 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-                // Redirigir al usuario a WhatsApp
-                window.open(whatsappUrl, '_blank'); // Abre en una nueva pestaña
+                window.open(whatsappUrl, '_blank');
             }
-
 
             // Event Listeners para los botones "Agregar al Carrito"
             addToCartButtons.forEach(button => {
@@ -910,46 +1005,29 @@
                 }
             });
 
-            // Event Listener para el botón "Aplicar Cupón"
             applyCouponButton.addEventListener('click', applyCoupon);
-
-             // Event Listener para aplicar cupón al presionar Enter en el input
             couponInput.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevenir el envío del formulario si estuviera dentro de uno
+                    event.preventDefault();
                     applyCoupon();
                 }
             });
-
-            // Event Listener para el botón "Proceder al Pago" - Redirige a WhatsApp
             checkoutButton.addEventListener('click', redirectToWhatsapp);
-
-            // Event Listener para el botón flotante de WhatsApp
             whatsappButton.addEventListener('click', redirectToWhatsapp);
-
-
-            // Event Listener para abrir el carrito
             cartIcon.addEventListener('click', function() {
                 cartModal.classList.add('open');
                 overlay.classList.add('open');
             });
-
-            // Event Listener para cerrar el carrito
             closeCartButton.addEventListener('click', function() {
                 cartModal.classList.remove('open');
                 overlay.classList.remove('open');
             });
-
-            // Event Listener para cerrar el carrito al hacer click en el overlay
             overlay.addEventListener('click', function() {
                 cartModal.classList.remove('open');
                 overlay.classList.remove('open');
             });
-
-            // Inicializar la visualización del carrito al cargar la página
             updateCartDisplay();
-
-        }); // Cierre del DOMContentLoaded
+        });
     </script>
 
 </body>

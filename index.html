@@ -205,6 +205,7 @@
             object-fit: cover; /* Asegura que la imagen cubra el área sin distorsión */
             border-radius: 0.5rem;
             margin-bottom: 1rem; /* Espacio debajo de la imagen */
+            cursor: pointer; /* Indica que la imagen es clickeable */
         }
          .image-item {
             background-color: white;
@@ -410,6 +411,54 @@
             background-color: #1f2937; /* Fondo oscuro para el footer */
             color: #d1d5db; /* Gris claro */
         }
+
+        /* Estilos para el modal de zoom de imagen */
+        #image-zoom-modal {
+            position: fixed;
+            inset: 0; /* Cubre toda la pantalla */
+            background-color: rgba(0, 0, 0, 0.75); /* Fondo negro semitransparente */
+            align-items: center;
+            justify-content: center;
+            z-index: 999; /* Asegura que esté por encima de todo */
+        }
+
+        /* La clase 'hidden' de Tailwind CSS ya maneja el 'display: none;' */
+        /* Cuando se remueve 'hidden', queremos que se muestre como flex */
+        #image-zoom-modal:not(.hidden) {
+            display: flex;
+        }
+
+        #zoomed-image {
+            max-width: 90vw; /* Máximo 90% del ancho del viewport */
+            max-height: 90vh; /* Máximo 90% de la altura del viewport */
+            object-fit: contain; /* Ajusta la imagen dentro de sus límites manteniendo la proporción */
+            border-radius: 0.5rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        #close-zoom-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: white;
+            color: #1f2937;
+            border: none;
+            border-radius: 9999px; /* Completamente redondo */
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        #close-zoom-modal:hover {
+            background-color: #e5e7eb;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -549,7 +598,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Raven" data-price="55.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Raven" alt="Imagen Test de Raven" class="product-card-image">
+                    <img src="https://i.postimg.cc/43xK16JZ/raven-adultos.jpg" alt="Imagen Test de Raven" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Raven</h4>
                     <p class="text-gray-700 mb-6">Matrices Progresivas de Raven.</p>
                     <div class="flex justify-between items-center">
@@ -559,7 +608,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Benton" data-price="55.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Benton" alt="Imagen Test de Benton" class="product-card-image">
+                    <img src="https://i.postimg.cc/KckMVDt8/benton.jpg" alt="Imagen Test de Benton" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Benton</h4>
                     <p class="text-gray-700 mb-6">Test de Retención Visual de Benton.</p>
                     <div class="flex justify-between items-center">
@@ -569,7 +618,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Koppitz 2" data-price="55.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Koppitz+2" alt="Imagen Test de Koppitz 2" class="product-card-image">
+                    <img src="https://i.postimg.cc/RhH4RF6v/koppitz.jpg" alt="Imagen Test de Koppitz 2" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Koppitz 2</h4>
                     <p class="text-gray-700 mb-6">Test Gestáltico Visomotor de Bender-Koppitz (Segunda Edición).</p>
                     <div class="flex justify-between items-center">
@@ -579,7 +628,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Cumanin" data-price="55.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Cumanin" alt="Imagen Test de Cumanin" class="product-card-image">
+                    <img src="https://i.postimg.cc/FFMLQkxg/cumanin.jpg" alt="Imagen Test de Cumanin" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Cumanin</h4>
                     <p class="text-gray-700 mb-6">Cuestionario de Madurez Neuropsicológica Infantil.</p>
                     <div class="flex justify-between items-center">
@@ -589,7 +638,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de Neuropsi" data-price="50.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+Neuropsi" alt="Imagen Test de Neuropsi" class="product-card-image">
+                    <img src="https://i.postimg.cc/HxJVqTch/neuropsi.jpg" alt="Imagen Test de Neuropsi" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de Neuropsi</h4>
                     <p class="text-gray-700 mb-6">Evaluación Neuropsicológica Breve en Español.</p>
                     <div class="flex justify-between items-center">
@@ -609,7 +658,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de CPQ" data-price="60.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+de+CPQ" alt="Imagen Test de CPQ" class="product-card-image">
+                    <img src="https://i.postimg.cc/w3YHbpLL/cpq.jpg" alt="Imagen Test de CPQ" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de CPQ</h4>
                     <p class="text-gray-700 mb-6">Cuestionario de Personalidad para Niños.</p>
                     <div class="flex justify-between items-center">
@@ -639,7 +688,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Test de la Figura Humana" data-price="39.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Test+Figura+Humana" alt="Imagen Test de la Figura Humana" class="product-card-image">
+                    <img src="https://i.postimg.cc/kMb2wXdV/test-de-la-figura-humana.jpg" alt="Imagen Test de la Figura Humana" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Test de la Figura Humana</h4>
                     <p class="text-gray-700 mb-6">Test Proyectivo para evaluar la personalidad a través del dibujo.</p>
                     <div class="flex justify-between items-center">
@@ -708,7 +757,7 @@
                 </div>
 
                  <div class="bg-white p-8 rounded-xl shadow-lg card border border-gray-200" data-name="Libro DSM-5" data-price="65.00">
-                    <img src="https://placehold.co/400x300/e0f2f7/1f2937?text=Libro+DSM-5" alt="Imagen Libro DSM-5 (Separado)" class="product-card-image">
+                    <img src="https://i.postimg.cc/2S2y31nt/DSM-5.jpg" alt="Imagen Libro DSM-5 (Separado)" class="product-card-image">
                     <h4 class="text-2xl font-bold text-gray-800 mb-4">Libro DSM-5 (Separado)</h4>
                     <p class="text-gray-700 mb-6">Manual Diagnóstico y Estadístico de los Trastornos Mentales - Quinta Edición.</p>
                     <div class="flex justify-between items-center">
@@ -838,6 +887,12 @@
         <p>© 2025 Skinner Store. Todos los derechos reservados.</p>
         <p class="text-sm mt-2">Diseñado con ❤️ para el autoconocimiento.</p>
     </footer>
+
+    <!-- Modal para zoom de imagen -->
+    <div id="image-zoom-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[999]">
+        <img id="zoomed-image" src="" alt="Imagen Ampliada">
+        <button id="close-zoom-modal" class="absolute top-6 right-6 bg-white text-gray-800 rounded-full w-10 h-10 flex items-center justify-center text-2xl shadow-md cursor-pointer hover:bg-gray-200 transition-all duration-200">×</button>
+    </div>
 
     <script>
         // Espera a que el DOM esté completamente cargado antes de ejecutar el script
@@ -1027,6 +1082,57 @@
                 overlay.classList.remove('open');
             });
             updateCartDisplay();
+
+            // --- Funcionalidad de Zoom de Imagen ---
+            const productImages = document.querySelectorAll('.product-card-image');
+            const imageZoomModal = document.getElementById('image-zoom-modal');
+            const zoomedImage = document.getElementById('zoomed-image');
+            const closeZoomModalButton = document.getElementById('close-zoom-modal');
+
+            // Función para cerrar el modal de zoom
+            function closeImageZoomModal() {
+                imageZoomModal.classList.add('hidden');
+            }
+
+            productImages.forEach(image => {
+                image.addEventListener('click', function() {
+                    zoomedImage.src = this.src; // Establece la fuente de la imagen ampliada
+                    imageZoomModal.classList.remove('hidden'); // Muestra el modal
+                    // Añadir un estado al historial para poder cerrar con el botón de retroceso
+                    history.pushState({ modal: 'imageZoom' }, 'Zoom de Imagen', '#image-zoom');
+                });
+            });
+
+            closeZoomModalButton.addEventListener('click', function() {
+                closeImageZoomModal();
+                // Si el modal se cierra con el botón 'x', retrocede en el historial
+                if (history.state && history.state.modal === 'imageZoom') {
+                    history.back();
+                }
+            });
+
+            // Cierra el modal si se hace clic fuera de la imagen (en el fondo oscuro)
+            imageZoomModal.addEventListener('click', function(event) {
+                if (event.target === imageZoomModal) { // Solo si el clic es directamente en el modal, no en la imagen
+                    closeImageZoomModal();
+                    // Si el modal se cierra al hacer clic en el fondo, retrocede en el historial
+                    if (history.state && history.state.modal === 'imageZoom') {
+                        history.back();
+                    }
+                }
+            });
+
+            // Manejar el botón de retroceso del navegador
+            window.addEventListener('popstate', function(event) {
+                // Si el estado actual es 'imageZoom' (significa que el modal estaba abierto y se presionó atrás)
+                if (event.state && event.state.modal === 'imageZoom') {
+                    imageZoomModal.classList.remove('hidden'); // Asegurarse de que el modal esté abierto si se vuelve a él
+                } else {
+                    // Si el estado no es 'imageZoom' o es null, significa que estamos retrocediendo desde el modal
+                    closeImageZoomModal();
+                }
+            });
+            // --- Fin Funcionalidad de Zoom de Imagen ---
         });
     </script>
 
